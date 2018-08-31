@@ -8,6 +8,7 @@
 		}
 	},
 	"require": {
-		"php": ">=5.2"
+		"php": ">=5.2",
+		"philo/laravel-blade": "3.*"
 	}
 }
