@@ -11,8 +11,7 @@ class NForm {
 	protected static $forms;
 	protected static $openForm;
 
-	static function open($action, $multipart = false, $id = "", $get = false,
-	$validationClass = "validate-form-custom", $form_type = NForm::FORM_TYPE_HORIZONTAL) {
+	protected static function openForm($action, $multipart, $id, $get, $validationClass, $form_type, $bootstrap_version) {
 		StyleBaseClass::checkOption($id, 'form'.rand(1000,9999));
 		$formOptions = array(
 			'id' => $id,
@@ -41,6 +40,16 @@ class NForm {
 				$formOptions['classLabel'] = "col-md-2";
 				$formOptions['classInput'] = "col-md-10";
 				break;
+		}
+
+		if ($bootstrap_version == 3) {
+			$formOptions['formConst'] = array(
+				'form-group' => 'form-group'
+			);
+		} else {
+			$formOptions['formConst'] = array(
+				'form-group' => 'form-group row'
+			);
 		}
 		
 		echo '
@@ -114,13 +123,15 @@ class NForm {
 	/* ***************** INPUT ***************** */
 
 	static function input($label, $name, $required = false, $options = array()) {
-		$formOptions = self::$forms[self::$openForm];
+		$formOptions = &self::$forms[self::$openForm];
 		
 		// INITIALIZE
 		// base options
 		StyleBaseClass::checkOption($options['id'], 'input'.rand(100000,999999));
 		$options['name'] = $name;
-		//$formOptions['fields'][] = array('name' => $options['name'], 'id' => $options['id'], 'type' => 'input');
+		
+		// aggiungi ai fields del form
+		$formOptions['fields'][] = array('name' => $options['name'], 'id' => $options['id'], 'type' => 'input');
 
 		// rules
 		$requiredLabel = '';
@@ -148,7 +159,7 @@ class NForm {
 
 		// BUILD FIELD
 		$label_output = '<label class="' . $formOptions['classLabel'] . ' control-label">' . $requiredLabel . $label . '</label>';
-		$build_field = '<div class="form-group">
+		$build_field = '<div class="'.$formOptions['formConst']['form-group'].'">
 			' . $label_output . '
 				
 			<div class="' . $formOptions['classInput'] . ' controls">
@@ -264,13 +275,15 @@ class NForm {
 	/* ***************** TEXTAREA ***************** */
 
 	static function textarea($label, $name, $required = false, $options = array()) {
-		$formOptions = self::$forms[self::$openForm];
+		$formOptions = &self::$forms[self::$openForm];
 		
 		// INITIALIZE
 		// base options
 		StyleBaseClass::checkOption($options['id'], 'textarea'.rand(100000,999999));
 		$options['name'] = $name;
-		//$formOptions['fields'][] = array('name' => $options['name'], 'id' => $options['id'], 'type' => 'textarea');
+		
+		// aggiungi ai fields del form
+		$formOptions['fields'][] = array('name' => $options['name'], 'id' => $options['id'], 'type' => 'textarea');
 
 		// rules
 		$requiredLabel = '';
@@ -291,7 +304,7 @@ class NForm {
 
 
 		// BUILD FIELD
-		echo '<div class="form-group">
+		echo '<div class="'.$formOptions['formConst']['form-group'].'">
 			<label class="' . $formOptions['classLabel'] . ' control-label">' . $requiredLabel . $label . '</label>
 		
 			<div class="' . $formOptions['classInput'] . ' controls">
@@ -327,7 +340,7 @@ class NForm {
 	/* ***************** INPUT CHECKBOXES ***************** */
 
 	static function checkboxes($label, $mainName, $checkboxes, $options = array()) {
-		$formOptions = self::$forms[self::$openForm];
+		$formOptions = &self::$forms[self::$openForm];
 		
 		// INITIALIZE
 		// base options
@@ -371,9 +384,12 @@ class NForm {
 			StyleBaseClass::checkOption($c['id'], null);
 			$chkid = $options['id'] . (!is_null($c['id']) ? '_' . $c['id'] : '');
 
+			// aggiungi ai fields del form
+			$formOptions['fields'][] = array('name' => $chkname, 'id' => $chkid, 'type' => 'checkbox', 'value' => !empty($c['value']) ? $c['value'] : null);
+
 			$checkboxTags[] = '<div class="checkbox checkbox-success">
 				<input type="checkbox" name="' . $chkname . '" id="' . $chkid . '" 
-					' . (!empty($c['value']) > 0 ? 'value="'.$c['value'].'"' : '') . ' 
+					' . (!empty($c['value']) ? 'value="'.$c['value'].'"' : '') . ' 
 					' . ($c['required'] ? 'data-rule-required="true"' : '') . ' 
 					' . ($c['disabled'] ? 'disabled' : '') . '
 					>
@@ -383,7 +399,7 @@ class NForm {
 		}
 
 		// BUILD FIELD
-		echo '<div class="form-group">
+		echo '<div class="'.$formOptions['formConst']['form-group'].'">
 			<label class="' . $formOptions['classLabel'] . ' control-label">' . $requiredLabel . $label . '</label>
 		
 			<div class="' . $formOptions['classInput'] . ' controls">
@@ -427,7 +443,7 @@ class NForm {
 	/* ***************** SELECT ***************** */
 
 	static function select($label, $name, $values, $required = false, $options = array()) {
-		$formOptions = self::$forms[self::$openForm];
+		$formOptions = &self::$forms[self::$openForm];
 		
 		// INITIALIZE
 		// base options
@@ -436,7 +452,9 @@ class NForm {
 		if (isset($options['multiple']) && $options['multiple']) {
 			$options['name'] .= '[]';
 		}
-		//$formOptions['fields'][] = array('name' => $options['name'], 'id' => $options['id'], 'type' => 'select', 'values' => $values);
+
+		// aggiungi ai fields del form
+		$formOptions['fields'][] = array('name' => $options['name'], 'id' => $options['id'], 'type' => 'select', 'values' => $values);
 
 		// rules
 		$requiredLabel = '';
@@ -447,7 +465,7 @@ class NForm {
 		
 		// BUILD FIELD
 		$label_output = '<label class="' . $formOptions['classLabel'] . ' control-label">' . $requiredLabel . $label . '</label>';
-		$build_field = '<div class="form-group">
+		$build_field = '<div class="'.$formOptions['formConst']['form-group'].'">
 				' . $label_output . '
 				
 				<div class="' . $formOptions['classInput'] . ' controls">
@@ -578,23 +596,119 @@ class NForm {
 	/* ***************** PLAIN HTML ***************** */
 
 	static function html($text) {
-		$formOptions = self::$forms[self::$openForm];
+		$formOptions = &self::$forms[self::$openForm];
 		
 		$class_label_offset = $formOptions['classLabel'];
 		$class_label_offset = str_replace('md-', 'md-offset-', $class_label_offset);
 		$class_label_offset = str_replace('lg-', 'lg-offset-', $class_label_offset);
 
-		echo '<div class="form-group">
+		echo '<div class="'.$formOptions['formConst']['form-group'].'">
 			<div class="' . $formOptions['classInput'] . ' ' . $class_label_offset . ' controls">
 				' . $text . '
 			</div>
 		</div><div class="hr-line-dashed"></div>';
 	}
 
+	/* ***************** FILL FORM ***************** */
+
+	/**
+	* Function to fill-in automatically a form based with array's values
+	* @param array $set dataset used to fill the form
+	*/
+	static function fillForm($set, $debug = false) {
+		$istruzioni = array();
+
+		foreach (self::$forms[self::$openForm]['fields'] as $form_field) {
+			$form_field['name'] = str_replace('[]', '', $form_field['name']);
+
+			// controlla se il campo deve essere riempito
+			$field_name = $form_field['name'];
+			$fill_value = null;
+			if (isset($set[$field_name])) {
+				$fill_value = $set[$field_name];
+			}
+
+			// controlla datepicker
+			elseif (substr($form_field['name'], -3) == '_in') {
+				$field_name = substr($form_field['name'], 0, -3);
+				if (isset($set[$field_name])) {
+					$fill_value = date('d/m/Y', strtotime($set[$field_name]));
+				}
+			}
+
+			// fill form
+			if (is_array($fill_value)) {
+				switch ($form_field['type']) {
+					case 'select':
+						foreach ($fill_value as $val) {
+							if (!array_key_exists($val, $form_field['values'])) {
+								$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.append("<option value=\"' . StyleBaseClass::jsReplace($val) . '\">' . StyleBaseClass::jsReplace($val) . '</option>");' . "\n";
+							}
+						}
+						$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.val(["' . StyleBaseClass::jsReplace(implode('","', $fill_value)) . '"]).trigger("change");' . "\n";
+						break;
+						
+					case 'checkbox':
+						if (strlen($form_field['value']) > 0 && in_array($form_field['value'], $fill_value)) {
+							$istruzioni[] = '$("#' . $form_field['id'] . '[value=\\"'.$form_field['value'].'\\"]").prop("checked", true);' . "\n";
+						}
+						break;
+
+					default:
+						; //do nothing
+				}
+			}
+			elseif (strlen($fill_value) > 0) {
+				switch ($form_field['type']) {
+					case 'hidden':
+					case 'input':
+					case 'textarea':
+						$istruzioni[] = '$("#' . $form_field['id'] . '").val(\'' . StyleBaseClass::jsReplace($fill_value) . '\');' . "\n";
+						break;
+
+					case 'select':
+						if (!array_key_exists($fill_value, $form_field['values'])) {
+							$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.append("<option value=\"' . StyleBaseClass::jsReplace($fill_value) . '\">' . StyleBaseClass::jsReplace($fill_value) . '</option>");' . "\n";
+						}
+						$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.val(\'' . StyleBaseClass::jsReplace($fill_value) . '\').trigger("change");' . "\n";
+						break;
+
+					case 'checkbox':
+						if (strlen($form_field['value']) > 0 && $form_field['value'] == $fill_value) {
+							$istruzioni[] = '$("#' . $form_field['id'] . '[value=\\"'.$form_field['value'].'\\"]").prop("checked", true);' . "\n";
+						} elseif (is_null($form_field['value']) && $fill_value !== 0) {
+							$istruzioni[] = '$("#' . $form_field['id'] . '").prop("checked", true);' . "\n";
+						}
+						break;
+
+					default:
+						; //do nothing
+				}
+			}
+		}
+
+		echo '<script type="text/javascript">
+		$(function() {' . "\n";
+		echo implode("\n", $istruzioni);
+		echo '});
+		</script>';
+
+		if ($debug) {
+			echo '<pre>';
+			echo '### FORM ###'."\n";
+			print_r(self::$forms[self::$openForm]['fields']);
+			echo "\n".'### DATASET ###'."\n";
+			print_r($set);
+			echo "\n".'## RISULTATO ###'."\n";
+			echo implode("\n", $istruzioni);
+			echo '</pre>';
+		}
+	}
+
 	/* ***************** SUBMIT FORM ***************** */
 
 	static function submitOnlyButtons($save_icon, $save_label, $cancel_btn = true, $other_actions = array(), $save_button_color = 'primary') {
-		$formOptions = self::$forms[self::$openForm];
+		$formOptions = &self::$forms[self::$openForm];
 		
 		$other_actions_str = '';
 		if (!empty($other_actions)) {
@@ -619,7 +733,7 @@ class NForm {
 			<button class="btn btn-' . $save_button_color . ' disabled" type="submit">
 				<i class="' . $save_icon . '"></i> ' . $save_label . '
 			</button>
-			' . ($cancel_btn ? '<a class="btn btn-white" href="javascript:window.history.back()">' . 'Cancel' . '</a>' : '') . '
+			' . ($cancel_btn ? '<a class="btn btn-white" href="javascript:window.history.back()">' . 'Annulla' . '</a>' : '') . '
 			' . $other_actions_str.'
 			<script>$(function() {$(\'#'.self::$openForm.' button[type=submit]\').removeClass(\'disabled\')})</script>';
 	}
