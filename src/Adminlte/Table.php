@@ -23,6 +23,9 @@ class Table extends \DeployStudio\Style\Base\Table {
 		
 		StyleBaseClass::divOpen('box-body');
 
+		// opzioni tabella
+		$options['tableClass'] = 'table-hover';
+
 		parent::openTable($headers, $options);
 	}
 
@@ -33,6 +36,9 @@ class Table extends \DeployStudio\Style\Base\Table {
 		Box::openBase($options['colclass']);
 		StyleBaseClass::divOpen('box');
 		StyleBaseClass::divOpen('box-body');
+
+		// opzioni tabella
+		$options['tableClass'] = 'table-hover';
 
 		parent::openTable($headers, $options);
 	}

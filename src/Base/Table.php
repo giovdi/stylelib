@@ -192,7 +192,7 @@ class Table {
 		|| (isset($options['form']) && $options['form'])) {
 			echo '<form class="form form-horizontal" method="post" action="?multipleAction" id="f_'.$id.'">';
 		}
-		echo '<table class="table table-hover" id="'.$id.'">';
+		echo '<table class="table '.$options['tableClass'].'" id="'.$id.'">';
 		
 		echo '<thead>';
 		echo '<tr>';

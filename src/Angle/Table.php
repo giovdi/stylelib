@@ -62,6 +62,9 @@ class Table extends \DeployStudio\Style\Base\Table {
 		
 		StyleBaseClass::divOpen('card-body');
 
+		// opzioni tabella
+		$options['tableClass'] = 'table-striped table-bordered';
+
 		parent::openTable($headers, $options);
 	}
 
@@ -73,13 +76,16 @@ class Table extends \DeployStudio\Style\Base\Table {
 		StyleBaseClass::divOpen('card');
 		StyleBaseClass::divOpen('card-body');
 
+		// opzioni tabella
+		$options['tableClass'] = 'table-striped table-bordered';
+
 		parent::openTable($headers, $options);
 	}
 
 	static function close($azioniMultiple = array()) {
-		StyleBaseClass::divClose();
-		StyleBaseClass::divClose();
-		Box::closeBase($azioniMultiple);
 		parent::close($azioniMultiple);
+		Box::closeBase($azioniMultiple);
+		StyleBaseClass::divClose();
+		StyleBaseClass::divClose();
 	}
 }
