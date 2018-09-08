@@ -19,8 +19,8 @@ class BoxStat extends \DeployStudio\Style\Base\BoxStat {
 	 * @param string $boxclass opzionale, col-12 default
 	 * @return void
 	 */
-	static function stat ($variante, $bg, $icona, $titolo, $valore, $ext = null, $link = null,
-		$testo_link = 'Maggiori dettagli', $boxclass = 'col-12') {
+	static function stat ($variante, $bg, $icona, $titolo, $valore, $ext = null, $boxclass = 'col-12',
+		$link = null, $testo_link = 'Maggiori dettagli') {
 		switch ($variante) {
 			case 1:
 				$content = '<!-- START card-->
