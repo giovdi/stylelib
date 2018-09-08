@@ -7,6 +7,16 @@ class StyleBaseClass {
 	protected static $blade_views = __DIR__ . '/../views';
 	protected static $blade_cache = __DIR__ . '/../cache';
 	
+	static function jsReplace($testo, $htmlchars = FALSE) {
+		$testo = str_replace('\'', '\\\'', $testo);
+		$testo = str_replace("\r\n", '\\r\\n', $testo);
+		$testo = str_replace("\n", '\\n', $testo);
+		if ($htmlchars) {
+			$testo = htmlspecialchars($testo);
+		}
+		return $testo;
+	}
+	
 	static function checkOption (&$var, $default) {
 		if (empty($var)) {
 			$var = $default;
