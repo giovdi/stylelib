@@ -1,6 +1,7 @@
 <?php
 namespace DeployStudio\Style\Base;
 
+use \DeployStudio\Style\Base\StyleLib;
 use \DeployStudio\Style\StyleBaseClass;
 
 class NForm {
@@ -382,7 +383,7 @@ class NForm {
 				StyleBaseClass::checkOption($c['id'], 'c'.rand(100000,999999));
 			}
 			StyleBaseClass::checkOption($c['id'], null);
-			$chkid = $options['id'] . (!is_null($c['id']) ? '_' . $c['id'] : '');
+			$chkid = $options['id'] . StyleLib::idGen((!is_null($c['id']) ? '_' . $c['id'] : ''));
 
 			// aggiungi ai fields del form
 			$formOptions['fields'][] = array('name' => $chkname, 'id' => $chkid, 'type' => 'checkbox', 'value' => !empty($c['value']) ? $c['value'] : null);
@@ -645,7 +646,9 @@ class NForm {
 								$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.append("<option value=\"' . StyleBaseClass::jsReplace($val) . '\">' . StyleBaseClass::jsReplace($val) . '</option>");' . "\n";
 							}
 						}
-						$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.val(["' . StyleBaseClass::jsReplace(implode('","', $fill_value)) . '"]).trigger("change");' . "\n";
+						if (count($fill_value) > 0) {
+							$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.val(["' . StyleBaseClass::jsReplace(implode('","', $fill_value)) . '"]).trigger("change");' . "\n";
+						}
 						break;
 						
 					case 'checkbox':

@@ -1,5 +1,5 @@
 <?php
-namespace DeployStudio\Style;
+namespace DeployStudio\Style\Base;
 
 class StyleLib {
 	static function idGen ($str) {
@@ -10,7 +10,7 @@ class StyleLib {
 		$str = preg_replace("/([^a-zA-Z0-9]+)/", "", $str);
 		return $str;
 	}
-	
+
 	static function jsReplace($testo, $htmlchars = FALSE) {
 		$testo = str_replace('\'', '\\\'', $testo);
 		$testo = str_replace("\r\n", '\\r\\n', $testo);
