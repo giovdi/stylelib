@@ -9,7 +9,7 @@ class Table extends \DeployStudio\Style\Base\Table {
 	static function open ($icona, $titolo, $azioni, $headers, $options = array()) {
 		StyleBaseClass::checkOption($options['colclass'], 'col-xs-12');
 		StyleBaseClass::checkOption($options['border_status'], null);
-		$options['tema'] = 'adminlte';
+		StyleBaseClass::checkOption($options['tableClass'], 'table-hover');
 
 		Box::openBase($options['colclass']);
 		StyleBaseClass::divOpen('box '.($options['border_status'] != null ? 'box-'.$border_status : ''));
@@ -23,22 +23,16 @@ class Table extends \DeployStudio\Style\Base\Table {
 		
 		StyleBaseClass::divOpen('box-body');
 
-		// opzioni tabella
-		$options['tableClass'] = 'table-hover';
-
 		parent::openTable($headers, $options);
 	}
 
 	static function openNoTitle ($headers, $options = array()) {
 		StyleBaseClass::checkOption($options['colclass'], 'col-xs-12');
-		$options['tema'] = 'adminlte';
+		StyleBaseClass::checkOption($options['tableClass'], 'table-hover');
 
 		Box::openBase($options['colclass']);
 		StyleBaseClass::divOpen('box');
 		StyleBaseClass::divOpen('box-body');
-
-		// opzioni tabella
-		$options['tableClass'] = 'table-hover';
 
 		parent::openTable($headers, $options);
 	}

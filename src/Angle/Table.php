@@ -48,7 +48,7 @@ class Table extends \DeployStudio\Style\Base\Table {
 	static function open ($icona, $titolo, $azioni, $headers, $options = array()) {
 		StyleBaseClass::checkOption($options['colclass'], 'col-md-12');
 		StyleBaseClass::checkOption($options['border_status'], null);
-		$options['tema'] = 'angle';
+		StyleBaseClass::checkOption($options['tableClass'], 'table-striped table-bordered');
 
 		Box::openBase($options['colclass']);
 		StyleBaseClass::divOpen('card card-default');
@@ -60,24 +60,18 @@ class Table extends \DeployStudio\Style\Base\Table {
 		parent::paginazione();
 		StyleBaseClass::divClose();
 		
-		StyleBaseClass::divOpen('card-body');
-
-		// opzioni tabella
-		$options['tableClass'] = 'table-striped table-bordered';
+		StyleBaseClass::divOpen('table-responsive', null, 'border-top:2px solid #eee');
 
 		parent::openTable($headers, $options);
 	}
 
 	static function openNoTitle ($headers, $options = array()) {
 		StyleBaseClass::checkOption($options['colclass'], 'col-md-12');
-		$options['tema'] = 'angle';
+		StyleBaseClass::checkOption($options['tableClass'], 'table-striped table-bordered');
 
 		Box::openBase($options['colclass']);
 		StyleBaseClass::divOpen('card');
 		StyleBaseClass::divOpen('card-body');
-
-		// opzioni tabella
-		$options['tableClass'] = 'table-striped table-bordered';
 
 		parent::openTable($headers, $options);
 	}
