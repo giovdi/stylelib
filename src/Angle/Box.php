@@ -5,13 +5,13 @@ use \DeployStudio\Style\Base;
 use \DeployStudio\Style\StyleBaseClass;
 
 class Box extends \DeployStudio\Style\Base\Box {
-	static function open ($box_col = 'col-md-12', $id = null) {
+	static function open ($box_col = 'col-12', $id = null) {
 		parent::openBase($box_col, $id);
 		StyleBaseClass::divOpen('card card-default');
 		StyleBaseClass::divOpen('card-body');
 	}
 		
-	static function openTitolo ($icona, $titolo, $box_col = 'col-md-12', $id = null) {
+	static function openTitolo ($icona, $titolo, $box_col = 'col-12', $id = null) {
 		parent::openBase($box_col, $id);
 		StyleBaseClass::divOpen('card card-default');
 

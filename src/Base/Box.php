@@ -14,18 +14,16 @@ class Box {
 		self::$openBox = $id;
 		self::$boxes[$id] = &$box_col;
 
-		if ($box_col == 'col-xs-12') {
+		if ($box_col == 'col-xs-12' || $box_col == 'col-12') {
 			StyleBaseClass::rowOpen(null, $id);
-			StyleBaseClass::colOpen();
-		} else {
-			StyleBaseClass::colOpen($box_col);
 		}
+		StyleBaseClass::colOpen($box_col);
 	}
 	
 	static function closeBase() {
 		$box_col = self::$boxes[self::$openBox];
 
-		if ($box_col == 'col-xs-12') {
+		if ($box_col == 'col-xs-12' || $box_col == 'col-12') {
 			StyleBaseClass::rowClose();
 		}
 		StyleBaseClass::colClose();
