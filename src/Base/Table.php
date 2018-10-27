@@ -246,6 +246,7 @@ class Table {
 		}
 		echo '</tr>';
 		echo '</thead>';
+		echo '<tbody>';
 		
 		// aggiunge i filtri
 		if ($filters) {
@@ -303,6 +304,7 @@ class Table {
 		$options = self::$tables[self::$openTable];
 
 		// chiusura tabella
+		echo '</tbody>';
 		echo '</table>';
 
 		// aggiunta azioni multiple
@@ -424,11 +426,15 @@ class Table {
 				if (isset($rowValue['class'])) {
 					$options[] = 'class="'.$rowValue['class'].'"';
 				}
+				if (isset($rowValue['id'])) {
+					$options[] = 'id="'.$rowValue['id'].'"';
+				}
 
 				$v = '<div class="btn-group">';
 				foreach ($buttons as $button) {
-					if (!isset($button['class']))
+					if (!isset($button['class'])) {
 						$button['class'] = 'primary';
+					}
 					
 					if (isset($button['confirm']) && isset($button['confirm_text']) && $button['confirm'] && strlen($button['confirm_text'])) {
 						$warn = ' onclick="if(!confirm(\''.str_replace("'", "\\'", $button['confirm_text']).'\')) return false;"';
@@ -471,6 +477,9 @@ class Table {
 				}
 				if (isset($rowValue['class'])) {
 					$options[] = 'class="'.$rowValue['class'].'"';
+				}
+				if (isset($rowValue['id'])) {
+					$options[] = 'id="'.$rowValue['id'].'"';
 				}
 			}
 			
