@@ -293,7 +293,7 @@ class NFormBase {
 
 	/* ***** variante: wysiwyg ***** */
 	static function wysiwygBase(&$options) {
-		$options['additionalFldClasses'][] = 'wysihtml5';
+		$options['additionalFldClasses'][] = 'wysiwyg';
 	}
 
 	/* ***************** INPUT CHECKBOXES ***************** */
