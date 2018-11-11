@@ -442,6 +442,9 @@ class NFormBase {
 		StyleBaseClass::checkOption($options['clear'], false);
 		$select2Options['allowClear'] = $options['clear'];
 
+		StyleBaseClass::checkOption($options['minLength'], 0);
+		$select2Options['minimumInputLength'] = $options['minLength'];
+
 		if (isset($options['theme'])) {
 			$select2Options['theme'] = $options['theme'];
 		}
