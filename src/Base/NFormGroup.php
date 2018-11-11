@@ -72,6 +72,9 @@ class NFormGroup extends NFormBase {
 			'.$label_output.'
 			<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
 
+			'.(isset($options['prependBtn']) ? '<div class="input-group-btn input-group-prepend">
+				'.$options['prependBtn'].'
+				</div>' : '').'
 			'.(isset($options['prepend']) ? '<div class="input-group-addon input-group-prepend">
 				<span class="input-group-text">'.$options['prepend'].'</span>
 				</div>' : '').'
@@ -80,7 +83,12 @@ class NFormGroup extends NFormBase {
 			
 			'.(isset($options['append']) ? '<div class="input-group-addon input-group-append">
 				<span class="input-group-text">'.$options['append'].'</span>
-				</div>' : '').'</div>
+				</div>' : '').'
+			'.(isset($options['appendBtn']) ? '<div class="input-group-btn input-group-append">
+				'.$options['appendBtn'].'
+				</div>' : '').'
+				
+			</div>
 			'.(strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">'.$options['description'].'</small>' : '').'
 
 		</div>'."\n\n";

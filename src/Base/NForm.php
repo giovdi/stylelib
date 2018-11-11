@@ -39,7 +39,7 @@ class NForm extends NFormBase {
 	}
 
 	static function datetimepicker($label, $name, $required = false, $options = array()) {
-		parent::datepickerBase($name, $options);
+		parent::datetimepickerBase($name, $options);
 		NForm::input($label, $name, $required, $options);
 	}
 
@@ -61,14 +61,26 @@ class NForm extends NFormBase {
 			' . $label_output . '
 				
 			<div class="' . $formOptions['classInput'] . ' controls">
-			' . (count($outputArr['additionalDivClasses']) > 0 ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
-			' . (isset($options['prepend']) ? '<span class="input-group-addon">' . $options['prepend'] . '</span>' : '') . '
+			<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
+
+			'.(isset($options['prependBtn']) ? '<div class="input-group-btn input-group-prepend">
+				'.$options['prependBtn'].'
+				</div>' : '').'
+			'.(isset($options['prepend']) ? '<div class="input-group-addon input-group-prepend">
+				<span class="input-group-text">'.$options['prepend'].'</span>
+				</div>' : '').'
 			
 			<input class="form-control" ' . NForm::getFldAttributes($options, $required) . ' type="' . $options['type'] . '" />
 			
-			' . (isset($options['append']) ? '<span class="input-group-addon">' . $options['append'] . '</span>' : '') . '
+			'.(isset($options['append']) ? '<div class="input-group-addon input-group-append">
+				<span class="input-group-text">'.$options['append'].'</span>
+				</div>' : '').'
+			'.(isset($options['appendBtn']) ? '<div class="input-group-btn input-group-append">
+				'.$options['appendBtn'].'
+				</div>' : '').'
+
 			' . (strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
-			' . (count($outputArr['additionalDivClasses']) > 0 ? '</div>' : '') . '
+			</div>
 			
 			</div>
 		</div><div class="hr-line-dashed"></div>' . "\n\n";

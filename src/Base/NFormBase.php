@@ -145,7 +145,7 @@ class NFormBase {
 		}
 
 		// additional classes
-		if (isset($options['prepend']) || isset($options['append'])) {
+		if (isset($options['prepend']) || isset($options['append']) || isset($options['prependBtn']) || isset($options['appendBtn'])) {
 			$outputArr['additionalDivClasses'][] = 'input-group';
 		}
 		if (isset($options['additionalDivClasses']) && is_array($options['additionalDivClasses'])) {
@@ -207,7 +207,7 @@ class NFormBase {
 		NFormBase::hidden($name, $hiddenValue, $hiddenid);
 	}
 
-	/* ***** variante: datepicker ***** */
+	/* ***** variante: datetimepicker ***** */
 	static function datetimepickerBase($name, &$options) {
 		// definisci qui un id per poterlo replicare nell'hidden
 		StyleBaseClass::checkOption($options['id'], 'input'.rand(100000,999999));
