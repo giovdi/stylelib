@@ -14,6 +14,9 @@ class Table {
 				continue;
 			}
 			
+			StyleBaseClass::checkOption($azione['class'], 'primary');
+			StyleBaseClass::checkOption($azione['label'], '');
+			
 			$modalStr = '';
 			if (!empty($azione['modal'])) {
 				$azione['href'] = '#';
@@ -30,8 +33,8 @@ class Table {
 				$tooltip = ' data-toggle="tooltip" title="'.$azione['tooltip'].'"';
 			}
 			
-			echo ' <a class="btn btn-xs btn-primary ibox-title-azione" href="'.$azione['href'].'"'.$tooltip.$target.$modalStr.'>';
-			echo '<i class="'.$azione['icon'].'"></i>';
+			echo ' <a class="btn btn-xs btn-'.$azione['class'].' ibox-title-azione" href="'.$azione['href'].'"'.$tooltip.$target.$modalStr.'>';
+			echo '<i class="'.$azione['icon'].'"></i> '.$azione['label'];
 			echo '</a>';
 		}
 		foreach ($azioni as $azione) {
