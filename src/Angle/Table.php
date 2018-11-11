@@ -78,8 +78,8 @@ class Table extends \DeployStudio\Style\Base\Table {
 
 	static function close($azioniMultiple = array()) {
 		parent::close($azioniMultiple);
+		StyleBaseClass::divClose();
+		StyleBaseClass::divClose();
 		Box::closeBase($azioniMultiple);
-		StyleBaseClass::divClose();
-		StyleBaseClass::divClose();
 	}
 }

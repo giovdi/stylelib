@@ -92,95 +92,79 @@ class Table {
 	}
 
 		
-	protected static function paginazione() {
-		//inizio paginazione
-		if (!empty($options['totalElements'])) { ?>
-			<div class="tablePagination pull-right hidden-xs">
-				<ul class='pagination'>
-			
-					<?php
-					if (!isset($options['pagerSelected'])) {
-						$options['pagerSelected'] = null;
-					}
-					$paginator = self::getPages($options['totalElements'], $options['pagerSelected']);
-					$pages_show = '';
-					
-					// VISUALIZZAZIONE DELLA SEQUENZA
-					if ($paginator['gotofirst']) {
-						$hellip = '';
-						if ($paginator['paginator_first'] > 2) {
-							$hellip = '&hellip;';
-						}
-						$pages_show .= '<li><a href="'.StyleLib::strip_query_param('p', 'p=1').'">1'.$hellip.'</a></li>';
-					}
-					for ($page = $paginator['paginator_first']; $page <= $paginator['paginator_last']; $page++){
-						$active_class = '';
-						if ($paginator['active_page'] == $page) {
-							$active_class = ' class="active"';
-						}
-						$pages_show .= "\n".'<li'.$active_class.'>'
-							.'<a href="'.StyleLib::strip_query_param('p', 'p='.$page).'">'
-							.$page.'</a></li>';
-					}
-					if ($paginator['gotolast']) {
-						$hellip = '';
-						if ($paginator['paginator_last'] < $paginator['num_pages'] - 1) {
-							$hellip = '&hellip;';
-						}
-						$pages_show .= '<li><a href="'.StyleLib::strip_query_param('p', 'p='.$paginator['num_pages']).'">'
-							.$hellip.$paginator['num_pages'].'</a></li>';
-					}
+	static function paginazione($totalElements, $pagerSelected = null) {
+		echo '
+		<div class="tablePagination no-margin pull-right hidden-xs d-none d-sm-block">
+			<ul class="pagination pagination-sm" style="margin:0; font-size:14px">
+				';
 
-					if ($paginator['gotofirst'] || $paginator['gotolast']) {
-						$pages_show .= '<li><a class="gotopage" title="Scrivi e premi INVIO per andare a una pagina specifica" data-toggle="tooltip" data-placement="left">
-								<input type="text" class="form-control text-info" onkeypress="if(event.keyCode == 13) tableGotopage(this);" />
-							</a></li>';
-					}
-					
-					echo $pages_show;
-					?>
-					
-				</ul>
-			</div>
+				$paginator = self::getPages($totalElements, $pagerSelected);
+				$pages_show = '';
 				
-			<div class="tablePagination pull-right visible-xs-block">
-				<ul class="pagination">
-					<li><a class="gotopage" title="Scrivi e conferma per andare a una pagina specifica" data-toggle="tooltip" data-placement="left">
-						<input type="text" class="form-control text-info" onkeypress="if(event.keyCode == 13) tableGotopage(this);"
-						placeholder="<?php echo $paginator['active_page'].'/'.$paginator['num_pages'] ?>" style="width:70px" />
-					</a></li>
-				</ul>
-			</div>
-
-			<?php
-			// paginazione - select elementi per pagina
-			if (!empty($options['pagerList'])) {
-				echo '<div class="pull-right hidden-xs" style="margin-top:-6px">Per pagina: <select class="pager" style="width:75px">';
-				$pager_values = array();
-				foreach ($options['pagerList'] as $pp) {
-					$pager_values[] = array('id' => $pp, 'text' => strval($pp));
+				// VISUALIZZAZIONE DELLA SEQUENZA
+				if ($paginator['gotofirst']) {
+					$hellip = '';
+					if ($paginator['paginator_first'] > 2) {
+						$hellip = '&hellip;';
+					}
+					$pages_show .= '<li class="page-item"><a class="page-link" href="'.StyleBaseClass::strip_query_param('p', 'p=1').'">1'.$hellip.'</a></li>';
 				}
-				echo '</select></div>';
-				?>
-				<script type="text/javascript">
-					$(function() {
-						$('#<?php echo $id ?> .pager').select2({
-							data:<?php echo json_encode($pager_values)?>,
-							minimumResultsForSearch: -1,
-						});
-						$('#<?php echo $id ?> .pager').val('<?php echo $paginator['items_page'] ?>').trigger("change");
-						$('#<?php echo $id ?> .pager').on("change", function(e) {
-							document.location='<?php echo StyleLib::strip_query_param(array('pp', 'p'),
-									array('p=1', "pp='+$(this).val()+'")) ?>';
-						});
-					});
-					
-				</script>
-				<?php
-			}
-		} // fine paginazione
+				for ($page = $paginator['paginator_first']; $page <= $paginator['paginator_last']; $page++){
+					$active_class = '';
+					if ($paginator['active_page'] == $page) {
+						$active_class = ' active';
+					}
+					$pages_show .= "\n".'<li class="page-item'.$active_class.'">'
+						.'<a class="page-link" href="'.StyleBaseClass::strip_query_param('p', 'p='.$page).'">'
+						.$page.'</a></li>';
+				}
+				if ($paginator['gotolast']) {
+					$hellip = '';
+					if ($paginator['paginator_last'] < $paginator['num_pages'] - 1) {
+						$hellip = '&hellip;';
+					}
+					$pages_show .= '<li class="page-item"><a class="page-link" href="'.StyleBaseClass::strip_query_param('p', 'p='.$paginator['num_pages']).'">'
+						.$hellip.$paginator['num_pages'].'</a></li>';
+				}
+
+				if ($paginator['gotofirst'] || $paginator['gotolast']) {
+					$pages_show .= '<li class="page-item">
+						<div class="gotopage">
+							<form class="paginatorform">
+								<input type="number" class="form-control text-info"
+								title="Scrivi e premi INVIO per andare a una pagina specifica" data-toggle="tooltip" data-placement="left" />
+							</form>
+						</div>
+					</li>';
+				}
+				
+				echo $pages_show;
+
+				echo '
+				
+			</ul>
+		</div>
+			
+		<div class="tablePagination pull-right visible-xs-block d-block d-sm-none">
+			<ul class="pagination">
+				<li class="page-item">
+					<div class="gotopage onlybox" style="padding:0;">
+						<form class="paginatorform">
+							<input type="number" class="form-control text-info"
+							placeholder="'.$paginator['active_page'].'/'.$paginator['num_pages'].'"
+							title="Scrivi e conferma per andare a una pagina specifica" data-toggle="tooltip" data-placement="left" />
+						</form>
+					</div>
+				</li>
+			</ul>
+		</div>';
+
+		// paginazione - select elementi per pagina
+		echo '<div class="pull-right hidden-xs d-none d-sm-block paginator-items-page">
+			Per pagina: <select class="pager" style="width:75px"></select></div>';
+		echo '<script>var itemsPage = '.$paginator['items_page'].';</script>';
 	}
-	
+		
 	static function openTable($headers, $options) {
 		StyleBaseClass::checkOption($options['id'], 'table'.rand(1000,9999));
 		$id = $options['id'];
@@ -334,51 +318,6 @@ class Table {
 			|| (isset($options['form']) && $options['form'])) {
 			echo '</form>';
 		}
-
-		//inizio paginazione
-		if (!empty($options['totalElements'])) {
-			StyleBaseClass::divOpen('tablePagination pull-right');
-			echo '<ul class="pagination">';
-
-			if (!isset($options['pagerSelected'])) {
-				$options['pagerSelected'] = null;
-			}
-			$paginator = self::getPages($options['totalElements'], $options['pagerSelected']);
-			$pages_show = '';
-			
-			// VISUALIZZAZIONE DELLA SEQUENZA
-			if ($paginator['gotofirst']) {
-				$hellip = '';
-				if ($paginator['paginator_first'] > 2) {
-					$hellip = '&hellip;';
-				}
-				$pages_show .= '<li><a href="'.StyleLib::strip_query_param('p', 'p=1').'">1'.$hellip.'</a></li>';
-			}
-			for ($page = $paginator['paginator_first']; $page <= $paginator['paginator_last']; $page++){
-				$active_class = '';
-				if ($paginator['active_page'] == $page) {
-					$active_class = ' class="active"';
-				}
-				$pages_show .= "\n".'<li'.$active_class.'>'
-					.'<a href="'.StyleLib::strip_query_param('p', 'p='.$page).'">'
-					.$page.'</a></li>';
-			}
-			if ($paginator['gotolast']) {
-				$hellip = '';
-				if ($paginator['paginator_last'] < $paginator['num_pages'] - 1) {
-					$hellip = '&hellip;';
-				}
-				$pages_show .= '<li><a href="'.StyleLib::strip_query_param('p', 'p='.$paginator['num_pages']).'">'
-					.$hellip.$paginator['num_pages'].'</a></li>';
-			}
-			
-			echo $pages_show;
-
-			echo '</ul>';
-			StyleBaseClass::divClose();
-			echo '<div class="clear"></div>';
-		}
-		// fine paginazione
 	}
 	
 	

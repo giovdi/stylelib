@@ -18,10 +18,16 @@ class Table extends \DeployStudio\Style\Base\Table {
 		StyleBaseClass::divOpen('box-header with-border');
 		echo '<h3 class="box-title"><span class="'.$icona.'"></span> '.$titolo.'</h3>';
 		parent::azioniIntestazione($azioni);
-		parent::paginazione();
+
+		if (isset($options['totalElements']) && $options['totalElements'] > 0) {
+			StyleBaseClass::checkOption($options['pagerSelected'], null);
+			StyleBaseClass::divOpen('box-tools');
+			parent::paginazione($options['totalElements'], $options['pagerSelected']);
+			StyleBaseClass::divClose();
+		}
 		StyleBaseClass::divClose();
 		
-		StyleBaseClass::divOpen('box-body');
+		StyleBaseClass::divOpen('box-body no-padding');
 
 		parent::openTable($headers, $options);
 	}
@@ -32,15 +38,26 @@ class Table extends \DeployStudio\Style\Base\Table {
 
 		Box::openBase($options['colclass']);
 		StyleBaseClass::divOpen('box');
-		StyleBaseClass::divOpen('box-body');
+		StyleBaseClass::divOpen('box-body no-padding');
 
 		parent::openTable($headers, $options);
 	}
 
 	static function close($azioniMultiple = array()) {
+		$options = self::$tables[self::$openTable];
+
+		parent::close($azioniMultiple);
 		StyleBaseClass::divClose();
+
+		if (isset($options['totalElements']) && $options['totalElements'] > 0) {
+			StyleBaseClass::divOpen('box-footer clearfix');
+			StyleBaseClass::divOpen('box-tools');
+			parent::paginazione($options['totalElements'], $options['pagerSelected']);
+			StyleBaseClass::divClose();
+			StyleBaseClass::divClose();
+		}
+
 		StyleBaseClass::divClose();
 		Box::closeBase($azioniMultiple);
-		parent::close($azioniMultiple);
 	}
 }

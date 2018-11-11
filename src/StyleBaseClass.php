@@ -17,6 +17,33 @@ class StyleBaseClass {
 		return $testo;
 	}
 	
+	static function strip_query_param($params_strip, $params_merge = array(), $pageret = true) {
+		if (!is_array($params_strip)) {
+			$params_strip = array($params_strip);
+		}
+		if (!is_array($params_merge)) {
+			$params_merge = array($params_merge);
+		}
+	
+		$pageQ = preg_split("/(&|\?)/", $_SERVER['REQUEST_URI']);
+		$page = $pageQ[0];
+		array_shift($pageQ);
+		foreach ($params_strip as $param) {
+			for ($i = 0; $i < count($pageQ); $i++) {
+				if (substr($pageQ[$i], 0, strpos($pageQ[$i], '=')) == $param) {
+					array_splice($pageQ, $i, 1);
+					$i--;
+				}
+			}
+		}
+
+		if (count(array_merge($pageQ, $params_merge)) > 0) {
+			return ($pageret ? $page.'?' : '').implode('&', array_merge($pageQ, $params_merge));
+		} else {
+			return ($pageret ? $page : '');
+		}
+	}
+	
 	static function checkOption (&$var, $default) {
 		if (empty($var)) {
 			$var = $default;
