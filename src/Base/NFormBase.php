@@ -398,7 +398,14 @@ class NFormBase {
 		}
 
 		// aggiungi ai fields del form
-		$formOptions['fields'][] = array('name' => $options['name'], 'id' => $options['id'], 'type' => 'select', 'values' => $values);
+		StyleBaseClass::checkOption($options['noinit'], false);
+		$formOptions['fields'][] = array(
+			'name' => $options['name'],
+			'id' => $options['id'],
+			'type' => 'select',
+			'values' => $values,
+			'noinit' => $options['noinit']
+		);
 		$outputArr = array(
 			'requiredLabel' => '',
 			'additionalDivClasses' => array(),
@@ -454,16 +461,20 @@ class NFormBase {
 		}
 
 		// output
-		$output = '
-			<script type="text/javascript">
-				$(function() {
-					select2' . preg_replace("/[^A-Za-z0-9]/", "", $options['id']) . ' = $("#' . $options['id'] . '").select2('.
-					json_encode($select2Options).');
-				});
-				' . (isset($options['globalData']) && $options['globalData'] ? 'var selectOptions_' . $options['id'] . ' = ' . json_encode($data) : '') . '
-			</script>' . "\n\n";
-
-		echo $output;
+		if (!$options['noinit']) {
+			echo '
+				<script type="text/javascript">
+					$(function() {
+						select2' . preg_replace("/[^A-Za-z0-9]/", "", $options['id']) . ' = $("#' . $options['id'] . '").select2('.
+						json_encode($select2Options).')
+						.on("select2:open", function (e) {
+							$(this).parents(".controls").find("span.has-error").remove();
+							$(this).removeClass("has-error is-invalid");
+						});
+					});
+					' . (isset($options['globalData']) && $options['globalData'] ? 'var selectOptions_' . $options['id'] . ' = ' . json_encode($data) : '') . '
+				</script>' . "\n\n";
+		}
 		
 		// VALUE
 		if (isset($options['value']) && !is_array($options['value'])) {
@@ -562,13 +573,15 @@ class NFormBase {
 			if (is_array($fill_value)) {
 				switch ($form_field['type']) {
 					case 'select':
-						foreach ($fill_value as $val) {
-							if (!array_key_exists($val, $form_field['values'])) {
-								$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.append("<option value=\"' . StyleBaseClass::jsReplace($val) . '\">' . StyleBaseClass::jsReplace($val) . '</option>");' . "\n";
+						if (!$form_field['noinit']) {
+							foreach ($fill_value as $val) {
+								if (!array_key_exists($val, $form_field['values'])) {
+									$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.append("<option value=\"' . StyleBaseClass::jsReplace($val) . '\">' . StyleBaseClass::jsReplace($val) . '</option>");' . "\n";
+								}
 							}
-						}
-						if (count($fill_value) > 0) {
-							$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.val(["' . StyleBaseClass::jsReplace(implode('","', $fill_value)) . '"]).trigger("change");' . "\n";
+							if (count($fill_value) > 0) {
+								$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.val(["' . StyleBaseClass::jsReplace(implode('","', $fill_value)) . '"]).trigger("change");' . "\n";
+							}
 						}
 						break;
 						
@@ -591,10 +604,12 @@ class NFormBase {
 						break;
 
 					case 'select':
-						if (!array_key_exists($fill_value, $form_field['values'])) {
-							$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.append("<option value=\"' . StyleBaseClass::jsReplace($fill_value) . '\">' . StyleBaseClass::jsReplace($fill_value) . '</option>");' . "\n";
+						if (!$form_field['noinit']) {
+							if (!array_key_exists($fill_value, $form_field['values'])) {
+								$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.append("<option value=\"' . StyleBaseClass::jsReplace($fill_value) . '\">' . StyleBaseClass::jsReplace($fill_value) . '</option>");' . "\n";
+							}
+							$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.val(\'' . StyleBaseClass::jsReplace($fill_value) . '\').trigger("change");' . "\n";
 						}
-						$istruzioni[] = 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $form_field['id']) . '.val(\'' . StyleBaseClass::jsReplace($fill_value) . '\').trigger("change");' . "\n";
 						break;
 
 					case 'checkbox':
