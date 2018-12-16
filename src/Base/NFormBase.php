@@ -83,6 +83,10 @@ class NFormBase {
 			$attr[] = 'data-rule-email="true"';
 		if (isset($options['number']) && $options['number'])
 			$attr[] = 'data-rule-number="true"';
+		if (isset($options['digits']) && $options['digits'])
+			$attr[] = 'data-rule-digits="true"';
+		if (isset($options['integer']) && $options['integer'])
+			$attr[] = 'data-rule-pattern="(-?)([0-9]+)"';
 		if (isset($options['min']) && $options['min'])
 			$attr[] = 'data-rule-min="' . $options['min'] . '"';
 		if (isset($options['max']) && $options['max'])
