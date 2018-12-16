@@ -35,7 +35,7 @@ class NForm extends NFormBase {
 
 	static function datepicker($label, $name, $required = false, $options = array()) {
 		parent::datepickerBase($name, $options);
-		NForm::input($label, $name, $required, $options);
+		NForm::input($label, $name.'_in', $required, $options);
 	}
 
 	static function datetimepicker($label, $name, $required = false, $options = array()) {

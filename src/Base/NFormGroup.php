@@ -46,7 +46,7 @@ class NFormGroup extends NFormBase {
 
 	static function datepicker($col, $label, $name, $required = false, $options = array()) {
 		parent::datepickerBase($name, $options);
-		NFormGroup::input($col, $label, $name, $required, $options);
+		NFormGroup::input($col, $label, $name.'_in', $required, $options);
 	}
 
 	static function datetimepicker($col, $label, $name, $required = false, $options = array()) {

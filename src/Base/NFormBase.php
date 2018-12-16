@@ -536,7 +536,13 @@ class NFormBase {
 	/* ***************** HIDDEN ***************** */
 
 	static function hidden($name, $value, $id = null) {
+		$formOptions = &self::$forms[self::$openForm];
+
+		// INITIALIZE
 		StyleBaseClass::checkOption($id, 'hidden'.rand(100000,999999));
+
+		// aggiungi ai fields del form
+		$formOptions['fields'][] = array('name' => $name, 'id' => $id, 'type' => 'hidden');
 
 		echo '<input name="' . $name . '" id="' . $id . '" type="hidden">
 			<script type="text/javascript">$("#' . $id . '").val(\'' . StyleBaseClass::jsReplace($value) . '\');</script>';
