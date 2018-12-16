@@ -13,9 +13,11 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 
 	static function select($col, $label, $name, $values, $required = false, $options = array()) {
 		StyleBaseClass::checkOption($options['theme'], 'bootstrap4');
+		parent::select($col, $label, $name, $values, $required, $options);
+	}
 
-		$outputArr = array();
-		parent::selectBase($label, $name, $values, $required, $options, $outputArr);
-		NFormGroup::selectBuild($col, $label, $required, $options, $outputArr);
+	static function selectRs($col, $label, $name, $rs, $columns_labels, $columns_values, $required = false, $options = array()) {
+		StyleBaseClass::checkOption($options['theme'], 'bootstrap4');
+		parent::selectRs($col, $label, $name, $rs, $columns_labels, $columns_values, $required, $options);
 	}
 }
