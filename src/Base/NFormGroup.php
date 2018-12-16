@@ -70,24 +70,25 @@ class NFormGroup extends NFormBase {
 		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
 		$build_field ='<div class="'.$col.' mb-3">'.'
 			'.$label_output.'
-			<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
+			<div class="controls">
+				<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
 
-			'.(isset($options['prependBtn']) ? '<div class="input-group-btn input-group-prepend">
-				'.$options['prependBtn'].'
-				</div>' : '').'
-			'.(isset($options['prepend']) ? '<div class="input-group-addon input-group-prepend">
-				<span class="input-group-text">'.$options['prepend'].'</span>
-				</div>' : '').'
-			
-			<input class="form-control" '.NForm::getFldAttributes($options, $required).' type="'.$options['type'].'" />
-			
-			'.(isset($options['append']) ? '<div class="input-group-addon input-group-append">
-				<span class="input-group-text">'.$options['append'].'</span>
-				</div>' : '').'
-			'.(isset($options['appendBtn']) ? '<div class="input-group-btn input-group-append">
-				'.$options['appendBtn'].'
-				</div>' : '').'
+				'.(isset($options['prependBtn']) ? '<div class="input-group-btn input-group-prepend">
+					'.$options['prependBtn'].'
+					</div>' : '').'
+				'.(isset($options['prepend']) ? '<div class="input-group-addon input-group-prepend">
+					<span class="input-group-text">'.$options['prepend'].'</span>
+					</div>' : '').'
 				
+				<input class="form-control" '.NForm::getFldAttributes($options, $required).' type="'.$options['type'].'" />
+				
+				'.(isset($options['append']) ? '<div class="input-group-addon input-group-append">
+					<span class="input-group-text">'.$options['append'].'</span>
+					</div>' : '').'
+				'.(isset($options['appendBtn']) ? '<div class="input-group-btn input-group-append">
+					'.$options['appendBtn'].'
+					</div>' : '').'
+				</div>
 			</div>
 			'.(strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">'.$options['description'].'</small>' : '').'
 
@@ -114,16 +115,18 @@ class NFormGroup extends NFormBase {
 		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
 		$build_field ='<div class="'.$col.' mb-3">'.'
 			'.$label_output.'
-			<div class="'.implode(' ', $outputArr['additionalDivClasses']).' controls">
-			' . (count($outputArr['additionalDivClasses']) > 0 ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
-		
-			<textarea class="form-control ' . implode(' ', $outputArr['additionalFldClasses']) . '" '
-					. NFormBase::getFldAttributes($options, $required) 
-					. '></textarea>
-		
-			' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
-			' . (count($outputArr['additionalDivClasses']) > 0 ? '</div>' : '') . '
-		
+			<div class="controls">
+				<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
+				' . (count($outputArr['additionalDivClasses']) > 0 ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
+			
+				<textarea class="form-control ' . implode(' ', $outputArr['additionalFldClasses']) . '" '
+						. NFormBase::getFldAttributes($options, $required) 
+						. '></textarea>
+			
+				' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
+				' . (count($outputArr['additionalDivClasses']) > 0 ? '</div>' : '') . '
+			
+				</div>
 			</div>
 		</div>' . "\n\n";
 		echo $build_field;
@@ -150,15 +153,17 @@ class NFormGroup extends NFormBase {
 		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
 		$build_field ='<div class="'.$col.' mb-3">'.'
 			'.$label_output.'
-			<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
-		
-			' . (!empty($outputArr['additionalDivClasses']) ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
-		
-			' . implode("\n", $checkboxTags) . '
-		
-			' . (!empty($options['description']) ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
-			' . (!empty($outputArr['additionalDivClasses']) ? '</div>' : '') . '
-		
+			<div class="controls">
+				<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
+			
+				' . (!empty($outputArr['additionalDivClasses']) ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
+			
+				' . implode("\n", $checkboxTags) . '
+			
+				' . (!empty($options['description']) ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
+				' . (!empty($outputArr['additionalDivClasses']) ? '</div>' : '') . '
+			
+				</div>
 			</div>
 		</div>' . "\n\n";
 		echo $build_field;
@@ -183,15 +188,17 @@ class NFormGroup extends NFormBase {
 		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
 		$build_field ='<div class="'.$col.' mb-3">'.'
 			'.$label_output.'
-			<div class="'.implode(' ', $outputArr['additionalDivClasses']).' controls">
+			<div class="controls">
+				<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
 
 				<select class="form-control" ' . NFormBase::getFldAttributes($options, $required) . ' style="width:100%">
 				</select>
 			
 				' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
-					
+				
 				</div>
-			</div>' . "\n\n";
+			</div>
+		</div>' . "\n\n";
 		echo $build_field;
 	}
 
@@ -205,7 +212,7 @@ class NFormGroup extends NFormBase {
 		$class_label_offset = str_replace('lg-', 'lg-offset-', $class_label_offset);
 
 		echo '<div class="'.$formOptions['formConst']['form-group'].'">
-			<div class="' . $class_label_offset . ' controls">
+			<div class="' . $class_label_offset . '">
 				' . $text . '
 			</div>
 		</div><div class="hr-line-dashed"></div>';
