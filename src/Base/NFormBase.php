@@ -426,16 +426,20 @@ class NFormBase {
 		$data = array(array());
 		if (!is_array($values)) {
 			echo '<b>Debug</b>: $values for the ' . $name . ' field is not an array, please check the select declaration.';
+		} elseif (isset($options['processData']) && !empty($values)) {
+			$data = $options['processData'].'({items: '.json_encode($values).'}).results';
+			$select2Options['data'] = '##DATA##';
 		} elseif (isset($options['labelAsValue']) && $options['labelAsValue']) {
 			foreach ($values as $val => $lab) {
 				$data[] = array('id' => $lab, 'text' => $lab);
 			}
+			$select2Options['data'] = $data;
 		} else {
 			foreach ($values as $val => $lab) {
 				$data[] = array('id' => strval($val), 'text' => $lab);
 			}
+			$select2Options['data'] = $data;
 		}
-		$select2Options['data'] = $data;
 
 		// placeholder
 		if (isset($options['placeholder'])) {
@@ -460,20 +464,97 @@ class NFormBase {
 			$select2Options['theme'] = $options['theme'];
 		}
 
+		$processData = null;
+		$ajax_data = null;
+		$ajax_params_fields = null;
+		if (isset($options['ajax'])) {
+			$urlparams = array();
+			if (isset($options['paramAjax']) && is_array($options['paramAjax'])) {
+				foreach ($options['paramAjax'] as $key => $value) {
+					$value_is_field = false;
+					foreach ($formOptions['fields'] as $field) {
+						if ($value == $field['id']) {
+							$ajax_params_fields[] = $value;
+							$value_is_field = true;
+							break;
+						}
+					}
+
+					if ($value_is_field) {
+						$urlparams[] = "$key: $('#$value').val()";
+					} else {
+						$urlparams[] = "$key: ".urlencode($value);
+					}
+				}
+			}
+			$select2Options['ajax'] = array(
+				'url' => $options['ajax'],
+				'datatype' => 'json',
+				'data' => '##AJAXDATA##'
+			);
+			if (isset($options['processData'])) {
+				$processData = $options['processData'];
+				$select2Options['ajax']['processResults'] = '##PROCESSDATA##';
+			}
+			$ajax_data = 'function (term, page) {
+				return {
+					q: term.term,
+					page_limit: 10,
+					'.implode(", ", $urlparams).'
+				};
+			}';
+		}
+
+		$templateFunction = null;
+		if (isset($options['templateResult'])) {
+			$select2Options['templateResult'] = '##TPLFUNCTION##';
+			$select2Options['templateSelection'] = '##TPLFUNCTION##';
+			if (isset($options['templateResultFunction'])) {
+				$templateFunction = $options['templateResult'];
+			} else {
+				if (substr($options['templateResult'], 0, 7) != 'result.') {
+					$options['templateResult'] = 'result.'.$options['templateResult'];
+				}
+				$templateFunction = 'function (result) {
+					return result.text || '.$options['templateResult'].';
+				}';
+			}
+		}
+
 		// output
 		if (!$options['noinit']) {
+			$select2JsonOptions = json_encode($select2Options);
+			if (!is_array($data)) {
+				$select2JsonOptions = str_replace('"##DATA##"', $data, $select2JsonOptions);
+			}
+			$select2JsonOptions = str_replace('"##AJAXDATA##"', $ajax_data, $select2JsonOptions);
+			$select2JsonOptions = str_replace('"##TPLFUNCTION##"', $templateFunction, $select2JsonOptions);
+			$select2JsonOptions = str_replace('"##PROCESSDATA##"', $processData, $select2JsonOptions);
 			echo '
 				<script type="text/javascript">
 					$(function() {
-						select2' . preg_replace("/[^A-Za-z0-9]/", "", $options['id']) . ' = $("#' . $options['id'] . '").select2('.
-						json_encode($select2Options).')
+						select2' . preg_replace("/[^A-Za-z0-9]/", "", $options['id']) . ' = $("#' . $options['id'] . '").select2('.$select2JsonOptions.')
 						.on("select2:open", function (e) {
 							$(this).parents(".controls").find("span.has-error").remove();
 							$(this).removeClass("has-error is-invalid");
 						});
 					});
 					' . (isset($options['globalData']) && $options['globalData'] ? 'var selectOptions_' . $options['id'] . ' = ' . json_encode($data) : '') . '
+					' . (!is_null($ajax_params_fields) && count($ajax_params_fields) > 0 ? '$("#' . $options['id'] . '").prop("disabled", true)' : '') . '
 				</script>' . "\n\n";
+			if (!is_null($ajax_params_fields)) {
+				foreach ($ajax_params_fields as $field) {
+					echo '<script>
+						$("#'.$field.'").change(function() {
+							if ($(this).val().length > 0 && $(this).val() != "Invalid date") {
+								$("#' . $options['id'] . '").prop("disabled", false);
+							} else {
+								$("#' . $options['id'] . '").prop("disabled", true);
+							}
+						});
+					</script>';
+				}
+			}
 		}
 		
 		// VALUE
@@ -499,6 +580,40 @@ class NFormBase {
 		}
 	}
 
+	/* ***** variante: select ajax ***** */
+	static function selectAjaxBase($ajaxUrl, $keys_labels, $keys_value, &$options) {
+		$process_function = 'processResults'.rand(100000,999999);
+		$options['processData'] = $process_function;
+		if ($keys_value != 'id') {
+			echo '<script>
+				function '.$process_function.' (data) {
+					return {
+						results: $.map(data.items, function (item) {
+							item.id = item.'.$keys_value.';
+							return item;
+						})
+					}
+				}
+				</script>';
+		} else {
+			echo '<script>
+				function '.$process_function.' (data) {
+					return {
+						results: data.items
+					}
+				}
+				</script>';
+		}
+
+		if ($keys_labels != 'text') {
+			$options['templateResult'] = $keys_labels;
+		}
+
+		$options['ajax'] = $ajaxUrl;
+		$options['minLength'] = 2;
+	}
+
+	/* ***** variante: select recordset ***** */
 	static function selectRSBase($rs, $columns_labels, $columns_values, &$values) {
 		if (count($rs) > 0) {
 			foreach ($rs as $row) {
@@ -684,10 +799,19 @@ class NFormBase {
 	}
 
 	static function submitCustom($save_icon, $save_label, $cancel_btn = true, $other_actions = array(), $save_button_color = 'primary') {
+		$formOptions = &self::$forms[self::$openForm];
+
+		$class = str_replace('md-', 'md-offset-', $formOptions['classLabel']);
+		$class .= ' '.$formOptions['classInput'];
+
+		if (strlen(trim($class)) == 0) {
+			$class = 'col-xs-12 col-12';
+		}
+
 		echo '
 			<div class="form-actions formactions-padding-sm">
 				<div class="row">
-					<div class="col-md-10 col-md-offset-2">
+					<div class="'.$class.'">
 						';
 						NFormBase::submitOnlyButtons($save_icon, $save_label, $cancel_btn, $other_actions, $save_button_color);
 						echo '
