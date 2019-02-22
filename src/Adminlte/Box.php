@@ -28,4 +28,14 @@ class Box extends \DeployStudio\Style\Base\Box {
 		StyleBaseClass::divClose(); //box
 		parent::closeBase();
 	}
+	
+	static function listOpen ($horizontal = true) {
+		echo '<dl '.($horizontal ? 'class="dl-horizontal"' : '').'>';
+	}
+	static function listRow ($label, $value) {
+		echo '<dt>'.$label.'</dt><dd>'.$value.'</dd>';
+	}
+	static function listClose () {
+		echo '</dl>';
+	}
 }
