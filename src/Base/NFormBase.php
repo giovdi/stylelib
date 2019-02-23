@@ -561,35 +561,43 @@ class NFormBase {
 		if (isset($options['value']) && !is_array($options['value'])) {
 			$options['value'] = array($options['value']);
 		}
+		StyleBaseClass::checkOption($options['_key_values'], 'id');
 		if (isset($options['value']) && is_array($options['value']) && count($options['value']) > 0) {
 			echo '<script type="text/javascript">' . "\n";
 			echo '$(function() {' . "\n";
-			foreach ($options['value'] as $val) {
-				$exists = false;
-				foreach ($data as $d) {
-					if (isset($d['id']) && $d['id'] == $val) {
-						$exists = true;
+			if (is_array($data)) {
+				foreach ($options['value'] as $val) {
+					$exists = false;
+					foreach ($data as $d) {
+						if (isset($d['id']) && $d['id'] == $val) {
+							$exists = true;
+						}
+					}
+					if (!$exists) {
+						echo 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $options['id']) . '.select2().append("<option value=\"' . StyleBaseClass::jsReplace($val) . '\">' . StyleBaseClass::jsReplace($val) . '</option>");' . "\n";
 					}
 				}
-				if (!$exists) {
-					echo 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $options['id']) . '.select2().append("<option value=\"' . StyleBaseClass::jsReplace($val) . '\">' . StyleBaseClass::jsReplace($val) . '</option>");' . "\n";
-				}
 			}
-			echo 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $options['id']) . '.val(["' . StyleBaseClass::jsReplace(implode('","', $options['value'])) . '"]).trigger("change");' . "\n";
+			if (!empty($options['value'][0]) && is_array($options['value'][0])) {
+				// TODO: manca supporto a prepopolamento multiplo delle select ajax
+				echo 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $options['id']) . '.val("' . StyleBaseClass::jsReplace($options['value'][0][$options['_key_values']]) . '").trigger("change");' . "\n";
+			} else {
+				echo 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $options['id']) . '.val(["' . StyleBaseClass::jsReplace(implode('","', $options['value'])) . '"]).trigger("change");' . "\n";
+			}
 			echo '});</script>';
 		}
 	}
 
 	/* ***** variante: select ajax ***** */
-	static function selectAjaxBase($ajaxUrl, $keys_labels, $keys_value, &$options) {
+	static function selectAjaxBase($ajaxUrl, $keys_labels, $key_values, &$options) {
 		$process_function = 'processResults'.rand(100000,999999);
 		$options['processData'] = $process_function;
-		if ($keys_value != 'id') {
+		if ($key_values != 'id') {
 			echo '<script>
 				function '.$process_function.' (data) {
 					return {
 						results: $.map(data.items, function (item) {
-							item.id = item.'.$keys_value.';
+							item.id = item.'.$key_values.';
 							return item;
 						})
 					}

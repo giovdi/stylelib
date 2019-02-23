@@ -160,9 +160,17 @@ class NForm extends NFormBase {
 		parent::selectBase($label, $name, $values, $required, $options, $outputArr);
 		NForm::selectBuild($label, $required, $options, $outputArr);
 	}
-	static function selectAjax($label, $name, $ajaxUrl, $keys_labels = 'text', $keys_values = 'id', $required = false, $options = array()) {
-		parent::selectAjaxBase($ajaxUrl, $keys_labels, $keys_values, $options);
-		NForm::select($label, $name, array(), $required, $options);
+	static function selectAjax($label, $name, $ajaxUrl, $keys_labels = 'text', $key_values = 'id', $required = false, $options = array()) {
+		parent::selectAjaxBase($ajaxUrl, $keys_labels, $key_values, $options);
+		if (empty($options['value'])) {
+			$values = array();
+		} elseif (empty($options['value'][0])) {
+			$values = array($options['value']);
+		} else {
+			$values = $options['value'];
+		}
+		$options['_key_values'] = $key_values;
+		NForm::select($label, $name, $values, $required, $options);
 	}
 	static function selectRS($label, $name, $rs, $columns_labels, $columns_values, $required = false, $options = array()) {
 		$values = array();
