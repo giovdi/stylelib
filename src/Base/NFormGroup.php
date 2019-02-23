@@ -22,17 +22,17 @@ class NFormGroup extends NFormBase {
 	static function input($col, $label, $name, $required = false, $options = array()) {
 		$outputArr = array();
 		parent::inputBase($label, $name, $required, $options, $outputArr);
-		NFormGroup::inputBuild($col, $label, $required, $options, $outputArr);
+		self::inputBuild($col, $label, $required, $options, $outputArr);
 	}
 
 	static function email($col, $label, $name, $required = false, $options = array()) {
 		parent::emailBase($options);
-		NFormGroup::input($col, $label, $name, $required, $options);
+		self::input($col, $label, $name, $required, $options);
 	}
 
 	static function password($col, $label, $name, $required = false, $options = array()) {
 		parent::passwordBase($options);
-		NFormGroup::input($col, $label, $name, $required, $options);
+		self::input($col, $label, $name, $required, $options);
 	}
 
 	static function file($col, $label, $name, $required = false, $options = array()) {
@@ -41,27 +41,27 @@ class NFormGroup extends NFormBase {
 		}
 
 		parent::fileBase($options);
-		NFormGroup::input($col, $label, $name, $required, $options);
+		self::input($col, $label, $name, $required, $options);
 	}
 
 	static function datepicker($col, $label, $name, $required = false, $options = array()) {
 		parent::datepickerBase($name, $options);
-		NFormGroup::input($col, $label, $name.'_in', $required, $options);
+		self::input($col, $label, $name.'_in', $required, $options);
 	}
 
 	static function datetimepicker($col, $label, $name, $required = false, $options = array()) {
 		parent::datepickerBase($name, $options);
-		NFormGroup::input($col, $label, $name, $required, $options);
+		self::input($col, $label, $name, $required, $options);
 	}
 
 	static function clockpicker($col, $label, $name, $required = false, $options = array()) {
 		parent::clockpickerBase($options);
-		NFormGroup::input($col, $label, $name, $required, $options);
+		self::input($col, $label, $name, $required, $options);
 	}
 
 	static function touchpicker($col, $label, $name, $required = false, $options = array()) {
 		parent::touchpickerBase($options);
-		NFormGroup::input($col, $label, $name, $required, $options);
+		self::input($col, $label, $name, $required, $options);
 	}
 
 	private static function inputBuild ($col, $label, $required, $options, $outputArr) {
@@ -101,12 +101,12 @@ class NFormGroup extends NFormBase {
 	static function textarea($col, $label, $name, $required = false, $options = array()) {
 		$outputArr = array();
 		parent::textareaBase($label, $name, $required, $options, $outputArr);
-		NFormGroup::textareaBuild($col, $label, $required, $options, $outputArr);
+		self::textareaBuild($col, $label, $required, $options, $outputArr);
 	}
 
 	static function wysiwyg($col, $label, $name, $required = false, $options = array()) {
 		parent::wysiwygBase($options);
-		NFormGroup::textarea($col, $label, $name, $required, $options);
+		self::textarea($col, $label, $name, $required, $options);
 	}
 
 	private static function textareaBuild ($col, $label, $required, $options, $outputArr) {
@@ -138,11 +138,11 @@ class NFormGroup extends NFormBase {
 		$checkboxTags = array();
 		$outputArr = array();
 		parent::checkboxesBase($label, $mainName, $checkboxes, $checkboxTags, $options, $outputArr);
-		NFormGroup::checkboxesBuild($col, $label, $checkboxTags, $options, $outputArr);
+		self::checkboxesBuild($col, $label, $checkboxTags, $options, $outputArr);
 	}
 
 	static function checkbox($col, $label, $name, $required = false, $disabled = false, $options = array()) {
-		NFormGroup::checkboxes($col, $label, $name, array(
+		self::checkboxes($col, $label, $name, array(
 			array('label' => '', 'name' => null, 'required' => $required, 'disabled' => $disabled)
 		), $options);
 	}
@@ -174,12 +174,12 @@ class NFormGroup extends NFormBase {
 	static function select($col, $label, $name, $values, $required = false, $options = array()) {
 		$outputArr = array();
 		parent::selectBase($label, $name, $values, $required, $options, $outputArr);
-		NFormGroup::selectBuild($col, $label, $required, $options, $outputArr);
+		self::selectBuild($col, $label, $required, $options, $outputArr);
 	}
 	static function selectRS($col, $label, $name, $rs, $columns_labels, $columns_values, $required = false, $options = array()) {
 		$values = array();
 		parent::selectRSBase($rs, $columns_labels, $columns_values, $values);
-		NFormGroup::select($col, $label, $name, $values, $required, $options);
+		self::select($col, $label, $name, $values, $required, $options);
 	}
 	
 	protected static function selectBuild($col, $label, $required, $options, $outputArr) {

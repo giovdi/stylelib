@@ -341,7 +341,7 @@ class Table {
 			} else {
 				$rowValues = $row;
 			}
-			Table::row($rowValues, $options);
+			self::row($rowValues, $options);
 		}
 	}
 	
@@ -363,7 +363,7 @@ class Table {
 				$buttons = $rowValue[0];
 			
 				if (isset($rowValue['colspan'])) {
-					$options[] = 'colspan="'.($rowValue['colspan'] == Table::$MAX ? count($headers) : $rowValue['colspan']).'"';
+					$options[] = 'colspan="'.($rowValue['colspan'] == self::$MAX ? count($headers) : $rowValue['colspan']).'"';
 				}
 				if (isset($rowValue['class'])) {
 					$options[] = 'class="'.$rowValue['class'].'"';
@@ -415,7 +415,7 @@ class Table {
 				$value = $rowValue[0];
 			
 				if (isset($rowValue['colspan'])) {
-					$options[] = 'colspan="'.($rowValue['colspan'] == Table::$MAX ? count($headers) : $rowValue['colspan']).'"';
+					$options[] = 'colspan="'.($rowValue['colspan'] == self::$MAX ? count($headers) : $rowValue['colspan']).'"';
 				}
 				if (isset($rowValue['class'])) {
 					$options[] = 'class="'.$rowValue['class'].'"';
