@@ -147,26 +147,9 @@ class NFormGroup extends NFormBase {
 		), $options);
 	}
 
-	protected static function checkboxesBuild ($col, $label, $outputArr, $checkboxTags, $options) {
-		$formOptions = &self::$forms[self::$openForm];
-
-		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
-		$build_field ='<div class="'.$col.' mb-3">'.'
-			'.$label_output.'
-			<div class="controls">
-				<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
-			
-				' . (!empty($outputArr['additionalDivClasses']) ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
-			
-				' . implode("\n", $checkboxTags) . '
-			
-				' . (!empty($options['description']) ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
-				' . (!empty($outputArr['additionalDivClasses']) ? '</div>' : '') . '
-			
-				</div>
-			</div>
-		</div>' . "\n\n";
-		echo $build_field;
+	static function radios($label, $mainName, $checkboxes, $options = array()) {
+		$options['radio'] = true;
+		self::checkboxes($label, $mainName, $checkboxes, $options);
 	}
 
 	/* ***************** SELECT ***************** */

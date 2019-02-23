@@ -126,7 +126,7 @@ class NForm extends NFormBase {
 		$checkboxTags = array();
 		$outputArr = array();
 		parent::checkboxesBase($label, $mainName, $checkboxes, $checkboxTags, $options, $outputArr);
-		self::checkboxesBuild($label, $checkboxTags, $options, $outputArr);
+		get_called_class()::checkboxesBuild($label, $checkboxTags, $options, $outputArr);
 	}
 
 	static function checkbox($label, $name, $required = false, $disabled = false, $options = array()) {
@@ -134,23 +134,22 @@ class NForm extends NFormBase {
 			array('label' => '', 'name' => null, 'required' => $required, 'disabled' => $disabled)
 		), $options);
 	}
-	
-	protected static function checkboxesBuild ($label, $checkboxTags, $options, $outputArr) {
-		$formOptions = &self::$forms[self::$openForm];
 
-		echo '<div class="'.$formOptions['formConst']['form-group'].'">
-			<label class="' . $formOptions['classLabel'] . ' control-label">' . $outputArr['requiredLabel'] . $label . '</label>
-		
-			<div class="' . $formOptions['classInput'] . ' controls">
-			' . (!empty($outputArr['additionalDivClasses']) ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
-		
-			' . implode("\n", $checkboxTags) . '
-		
-			' . (!empty($options['description']) ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
-			' . (!empty($outputArr['additionalDivClasses']) ? '</div>' : '') . '
-		
-			</div>
-		</div><div class="hr-line-dashed"></div>' . "\n\n";
+	static function radios($label, $mainName, $radios, $required = false, $options = array()) {
+		$options['radio'] = true;
+		if (!isset($radios[0])) {
+			$vals = array();
+			foreach ($radios as $k => $v) {
+				$vals[] = array('label' => $v, 'value' => $k, 'required' => $required);
+			}
+		} else {
+			foreach ($radios as &$rad) {
+				$rad['required'] = $required;
+			}
+			unset($rad);
+			$vals = $radios;
+		}
+		self::checkboxes($label, $mainName, $vals, $options);
 	}
 
 	/* ***************** SELECT ***************** */

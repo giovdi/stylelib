@@ -308,6 +308,7 @@ class NFormBase {
 		// INITIALIZE
 		// base options
 		StyleBaseClass::checkOption($options['id'], 'checkbox'.rand(100000,999999));
+		StyleBaseClass::checkOption($options['radio'], false);
 
 		$outputArr = array(
 			'requiredLabel' => '',
@@ -315,9 +316,17 @@ class NFormBase {
 			'additionalFldClasses' => array()
 		);
 
-		// rules
-		if (is_array($checkboxes[0]) && isset($checkboxes[0]['name']) && is_null($checkboxes[0]['name'])
-		&& isset($checkboxes[0]['required']) && $checkboxes[0]['required']) {
+		// regola generale - checkbox
+		// mostra l'asterisco se c'e' una sola checkbox e questa non ha un'etichetta
+		$primachiave = key($checkboxes);
+		if (!$options['radio'] && count($checkboxes) == 1 && is_null($checkboxes[$primachiave]['name'])
+		&& isset($checkboxes[$primachiave]['required']) && $checkboxes[$primachiave]['required']) {
+			$outputArr['requiredLabel'] = '<font color="red">*</font> ';
+		}
+
+		// regola generale - radio
+		// mostra l'asterisco se c'e' la required nella prima chiave (se true, vale per tutte)
+		if ($options['radio'] && $checkboxes[$primachiave]['required']) {
 			$outputArr['requiredLabel'] = '<font color="red">*</font> ';
 		}
 
@@ -333,10 +342,12 @@ class NFormBase {
 			// checkbox name
 			StyleBaseClass::checkOption($c['name'], null);
 			$chkname = $mainName;
-			if (!is_null($c['name'])) {
-				$chkname .= '[' . $c['name'] . ']';
-			} elseif (count($checkboxes) > 1) {
-				$chkname .= '[]';
+			if (!$options['radio']) {
+				if (!is_null($c['name'])) {
+					$chkname .= '[' . $c['name'] . ']';
+				} elseif (count($checkboxes) > 1) {
+					$chkname .= '[]';
+				}
 			}
 
 			// checkbox id
@@ -355,17 +366,13 @@ class NFormBase {
 			// aggiungi ai fields del form
 			$formOptions['fields'][] = array('name' => $chkname, 'id' => $chkid, 'type' => 'checkbox', 'value' => !empty($c['value']) ? $c['value'] : null);
 
-			$checkboxTags[] = '<div class="checkbox checkbox-success">
-				<input type="checkbox" name="' . $chkname . '" id="' . $chkid . '" 
-					' . (!empty($c['value']) ? 'value="'.$c['value'].'"' : '') . ' 
-					' . ($c['required'] ? 'data-rule-required="true"' : '') . ' 
-					' . ($c['disabled'] ? 'disabled' : '') . '
-					>
-					&nbsp;<label>' . $c['label'].'</label>'
-									. (strlen($c['label']) > 0 && $c['required'] ? ' <font color="red">*</font>' : '') . '
-				</div>';
+			if ($options['radio']) {
+				$checkboxTags[] = get_called_class()::radioBuild($chkname, $chkid, $c);
+			} else {
+				$checkboxTags[] = get_called_class()::checkboxBuild($chkname, $chkid, $c);
+			}
 		}
-		
+
 		// VALUE
 		if (isset($options['value']) && !is_array($options['value'])) {
 			$options['value'] = array($options['value']);
