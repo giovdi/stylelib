@@ -33,6 +33,14 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 		echo $build_field;
 	}
 
+	static function checkboxBuild ($chkname, $chkid, $c) {
+		return '';
+	}
+
+	static function radioBuild ($chkname, $chkid, $c) {
+		return '';
+	}
+
 	static function select($col, $label, $name, $values, $required = false, $options = array()) {
 		StyleBaseClass::checkOption($options['theme'], 'bootstrap4');
 		parent::select($col, $label, $name, $values, $required, $options);
