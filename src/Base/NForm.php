@@ -135,7 +135,7 @@ class NForm extends NFormBase {
 		), $options);
 	}
 
-	static function radios($label, $mainName, $radios, $required = false, $options = array()) {
+	static function radio($label, $mainName, $radios, $required = false, $options = array()) {
 		$options['radio'] = true;
 		if (!isset($radios[0])) {
 			$vals = array();
