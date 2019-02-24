@@ -135,7 +135,7 @@ class NForm extends NFormBase {
 		), $options);
 	}
 
-	static function radio($label, $mainName, $radios, $required = false, $options = array()) {
+	static function radio($label, $name, $radios, $required = false, $options = array()) {
 		$options['radio'] = true;
 		if (!isset($radios[0])) {
 			$vals = array();
@@ -149,7 +149,7 @@ class NForm extends NFormBase {
 			unset($rad);
 			$vals = $radios;
 		}
-		self::checkboxes($label, $mainName, $vals, $options);
+		self::checkboxes($label, $name, $vals, $options);
 	}
 
 	/* ***************** SELECT ***************** */

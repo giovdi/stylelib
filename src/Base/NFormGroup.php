@@ -138,7 +138,7 @@ class NFormGroup extends NFormBase {
 		$checkboxTags = array();
 		$outputArr = array();
 		parent::checkboxesBase($label, $mainName, $checkboxes, $checkboxTags, $options, $outputArr);
-		self::checkboxesBuild($col, $label, $checkboxTags, $options, $outputArr);
+		get_called_class()::checkboxesBuild($col, $label, $checkboxTags, $options, $outputArr);
 	}
 
 	static function checkbox($col, $label, $name, $required = false, $disabled = false, $options = array()) {
@@ -147,9 +147,21 @@ class NFormGroup extends NFormBase {
 		), $options);
 	}
 
-	static function radios($label, $mainName, $checkboxes, $options = array()) {
+	static function radio($col, $label, $name, $radios, $required = false, $options = array()) {
 		$options['radio'] = true;
-		self::checkboxes($label, $mainName, $checkboxes, $options);
+		if (!isset($radios[0])) {
+			$vals = array();
+			foreach ($radios as $k => $v) {
+				$vals[] = array('label' => $v, 'value' => $k, 'required' => $required);
+			}
+		} else {
+			foreach ($radios as &$rad) {
+				$rad['required'] = $required;
+			}
+			unset($rad);
+			$vals = $radios;
+		}
+		self::checkboxes($col, $label, $name, $vals, $options);
 	}
 
 	/* ***************** SELECT ***************** */
