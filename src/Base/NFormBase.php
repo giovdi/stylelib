@@ -361,7 +361,7 @@ class NFormBase {
 				StyleBaseClass::checkOption($c['id'], 'c'.rand(100000,999999));
 			}
 			StyleBaseClass::checkOption($c['id'], null);
-			$chkid = $options['id'] . StyleLib::idGen((!is_null($c['id']) ? '_' . $c['id'] : ''));
+			$chkid = $options['id'] . (!is_null($c['id']) ? '_' . StyleLib::idGen($c['id']) : '');
 
 			// aggiungi ai fields del form
 			$formOptions['fields'][] = array('name' => $chkname, 'id' => $chkid, 'type' => 'checkbox', 'value' => !empty($c['value']) ? $c['value'] : null);
