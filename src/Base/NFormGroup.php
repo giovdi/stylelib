@@ -134,7 +134,7 @@ class NFormGroup extends NFormBase {
 
 	/* ***************** INPUT CHECKBOXES ***************** */
 	
-	static function checkboxes($col, $label, $name, $required = false, $options = array()) {
+	static function checkboxes($col, $label, $mainName, $checkboxes, $options = array()) {
 		$checkboxTags = array();
 		$outputArr = array();
 		parent::checkboxesBase($label, $mainName, $checkboxes, $checkboxTags, $options, $outputArr);
