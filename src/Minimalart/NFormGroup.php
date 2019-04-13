@@ -6,6 +6,9 @@ use DeployStudio\Style\Base\NFormBase;
 
 
 class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
+	const THEME = 'MinimalArt';
+	
+	
 	static function open($action, $multipart = false, $id = "", $get = false,
 		$validationClass = "validate-form-custom") {
 		self::openForm ($action, $multipart, $id, $get, $validationClass, NFormBase::FORM_TYPE_VERTICAL, 4);
@@ -17,25 +20,23 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
 		$build_field ='<div class="'.$col.' mb-3">'.'
 			'.$label_output.'
-			<div class="controls">
-				<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
+			<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
 
-				'.(isset($options['prependBtn']) ? '<div class="input-group-btn input-group-prepend">
-					'.$options['prependBtn'].'
-					</div>' : '').'
-				'.(isset($options['prepend']) ? '<div class="input-group-addon input-group-prepend">
-					<span class="input-group-text">'.$options['prepend'].'</span>
-					</div>' : '').'
-				
-				<input class="form-control" '.NForm::getFldAttributes($options, $required).' type="'.$options['type'].'" />
-				
-				'.(isset($options['append']) ? '<div class="input-group-addon input-group-append">
-					<span class="input-group-text">'.$options['append'].'</span>
-					</div>' : '').'
-				'.(isset($options['appendBtn']) ? '<div class="input-group-btn input-group-append">
-					'.$options['appendBtn'].'
-					</div>' : '').'
-				</div>
+			'.(isset($options['prependBtn']) ? '<div class="input-group-btn">
+				'.$options['prependBtn'].'
+				</div>' : '').'
+			'.(isset($options['prepend']) ? '
+				<span class="input-group-addon">'.$options['prepend'].'</span>
+				' : '').'
+			
+			<input class="form-control" '.NForm::getFldAttributes($options, $required).' type="'.$options['type'].'" />
+			
+			'.(isset($options['append']) ? '
+				<span class="input-group-addon">'.$options['append'].'</span>
+				' : '').'
+			'.(isset($options['appendBtn']) ? '<div class="input-group-btn">
+				'.$options['appendBtn'].'
+				</div>' : '').'
 			</div>
 			'.(strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">'.$options['description'].'</small>' : '').'
 

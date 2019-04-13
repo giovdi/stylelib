@@ -6,6 +6,8 @@ use DeployStudio\Style\Base\NFormBase;
 
 
 class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
+	const THEME = 'Angle';
+
 	static function open($action, $multipart = false, $id = "", $get = false,
 		$validationClass = "validate-form-custom") {
 		self::openForm ($action, $multipart, $id, $get, $validationClass, NFormBase::FORM_TYPE_VERTICAL, 4);
