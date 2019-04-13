@@ -75,9 +75,9 @@ class NForm extends NFormBase {
 		get_called_class()::checkboxesBuild($label, $checkboxTags, $options, $outputArr);
 	}
 
-	static function checkbox($label, $name, $required = false, $disabled = false, $options = array()) {
+	static function checkbox($label, $name, $required = false, $disabled = false, $value = "on", $options = array()) {
 		self::checkboxes($label, $name, array(
-			array('label' => '', 'name' => null, 'required' => $required, 'disabled' => $disabled)
+			array('label' => '', 'name' => null, 'required' => $required, 'disabled' => $disabled, 'value' => $value)
 		), $options);
 	}
 
