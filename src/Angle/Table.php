@@ -60,4 +60,11 @@ class Table extends \DeployStudio\Style\Base\Table {
 		StyleBaseClass::divClose();
 		Box::closeBase($azioniMultiple);
 	}
+	
+	static function cellCheckbox($id, $disabled = false, $checked = false) {
+		return '<input type="checkbox" name="mSel[]" value="'.$id.'"'.($disabled ? ' disabled' : '').($checked ? ' checked' : '').'>';
+	}
+	static function _allCheckbox() {
+		return '<input type="checkbox" id="selectAll">';
+	}
 }

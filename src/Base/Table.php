@@ -185,7 +185,7 @@ class Table {
 		echo '<tr>';
 		if (isset($options['selectAllCheck']) && $options['selectAllCheck']) {
 			echo '<th>';
-			echo '<input type="checkbox" id="selectAll">';
+			echo get_called_class()::_allCheckbox();
 			echo StyleBaseClass::getView('tableSelectallJs', array('id' => $id));
 			echo '</th>';
 		}
@@ -433,9 +433,5 @@ class Table {
 			echo '<td '.implode(' ', $options).'>'.$value.'</td>';
 		}
 		echo '</tr>';
-	}
-	
-	static function cellCheckbox($id, $disabled = false, $checked = false) {
-		return '<input type="checkbox" name="mSel[]" value="'.$id.'"'.($disabled ? ' disabled' : '').($checked ? ' checked' : '').'>';
 	}
 }
