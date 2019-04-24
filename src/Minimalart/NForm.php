@@ -15,7 +15,10 @@ class NForm extends \DeployStudio\Style\Base\NForm {
 	static function inputBuild ($label, $required, $options, $outputArr) {
 		$formOptions = &self::$forms[self::$openForm];
 
-		$label_output = '<label class="' . $formOptions['classLabel'] . ' control-label">' . $outputArr['requiredLabel'] . $label . '</label>';
+		$label_output = '';
+		if (!is_null($label)) {
+			$label_output = '<label class="' . $formOptions['classLabel'] . ' control-label">' . $outputArr['requiredLabel'] . $label . '</label>';
+		}
 		$build_field = '<div class="'.$formOptions['formConst']['form-group'].'">
 			' . $label_output . '
 				
@@ -49,8 +52,12 @@ class NForm extends \DeployStudio\Style\Base\NForm {
 	static function textareaBuild ($label, $required, $options, $outputArr) {
 		$formOptions = &self::$forms[self::$openForm];
 
+		$label_output = '';
+		if (!is_null($label)) {
+			$label_output = '<label class="' . $formOptions['classLabel'] . ' control-label">' . $outputArr['requiredLabel'] . $label . '</label>';
+		}
 		echo '<div class="'.$formOptions['formConst']['form-group'].'">
-			<label class="' . $formOptions['classLabel'] . ' control-label">' . $outputArr['requiredLabel'] . $label . '</label>
+			'.$label_output.'
 		
 			<div class="' . $formOptions['classInput'] . ' controls">
 			' . (count($outputArr['additionalDivClasses']) > 0 ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '

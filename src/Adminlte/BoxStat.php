@@ -53,32 +53,6 @@ class BoxStat extends \DeployStudio\Style\Base\BoxStat {
 					<!-- /.info-box-content -->
 				</div>
 				<!-- /.info-box -->';
-
-
-				/*$content = '<!-- START card-->
-				<div class="card bg-'.$bg.' border-0">
-					<div class="card-header">
-						<div class="row align-items-center">
-							<div class="col-3">
-								<em class="'.$icona.' fa-5x"></em>
-							</div>
-							<div class="col-9 text-right">
-								<div class="text-lg">
-								</div>
-								<p class="m-0"></p>
-							</div>
-						</div>
-					</div>'
-					.(!is_null($link) ? '
-					<a class="card-footer bg-gray-dark bt0 clearfix btn-block d-flex" href="'.$link.'">
-						<span>'.$testo_link.'</span>
-						<span class="ml-auto">
-							<em class="fa fa-chevron-circle-right"></em>
-						</span>
-					</a>' : '')
-					.'
-				</div>
-				<!-- END card-->';*/
 				break;
 
 			case 2:

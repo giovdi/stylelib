@@ -17,8 +17,11 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 	static function inputBuild ($col, $label, $required, $options, $outputArr) {
 		$formOptions = &self::$forms[self::$openForm];
 
-		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
-		$build_field ='<div class="'.$col.' mb-3">'.'
+		$label_output = '';
+		if (!is_null($label)) {
+			$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
+		}
+		$build_field ='<div class="'.$col.' form-group">'.'
 			'.$label_output.'
 			<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
 
@@ -38,7 +41,7 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 				'.$options['appendBtn'].'
 				</div>' : '').'
 			</div>
-			'.(strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">'.$options['description'].'</small>' : '').'
+			'.(strlen($options['description']) > 0 ? '<span class="help-block">'.$options['description'].'</span>' : '').'
 
 		</div>'."\n\n";
 		echo $build_field;
@@ -48,19 +51,17 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 		$formOptions = &self::$forms[self::$openForm];
 
 		$label_output = '<label>' . $label.' './*$outputArr['requiredLabel'] .*/ '</label>';
-		$build_field ='<div class="'.$col.' mb-3">'.'
+		$build_field ='<div class="'.$col.' form-group">'.'
 			'.$label_output.'
-			<div class="controls">
-				<div class="'/*.implode(' ', $outputArr['additionalDivClasses'])*/.'">
-			
-				' . (!empty($outputArr['additionalDivClasses']) ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
-			
-				' . implode("\n", $checkboxTags) . '
-			
-				' . (!empty($options['description']) ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
-				' . (!empty($outputArr['additionalDivClasses']) ? '</div>' : '') . '
-			
-				</div>
+			<div class="'/*.implode(' ', $outputArr['additionalDivClasses'])*/.'">
+		
+			' . (!empty($outputArr['additionalDivClasses']) ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
+		
+			' . implode("\n", $checkboxTags) . '
+		
+			' . (!empty($options['description']) ? '<span class="help-block">' . $options['description'] . '</span>' : '') . '
+			' . (!empty($outputArr['additionalDivClasses']) ? '</div>' : '') . '
+		
 			</div>
 		</div>' . "\n\n";
 		echo $build_field;
@@ -69,21 +70,22 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 	static function textareaBuild ($col, $label, $required, $options, $outputArr) {
 		$formOptions = &self::$forms[self::$openForm];
 
-		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
-		$build_field ='<div class="'.$col.' mb-3">'.'
+		$label_output = '';
+		if (!is_null($label)) {
+			$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
+		}
+		$build_field ='<div class="'.$col.' form-group">'.'
 			'.$label_output.'
-			<div class="controls">
-				<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
-				' . (count($outputArr['additionalDivClasses']) > 0 ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
-			
-				<textarea class="form-control ' . implode(' ', $outputArr['additionalFldClasses']) . '" '
-						. NFormBase::getFldAttributes($options, $required) 
-						. '></textarea>
-			
-				' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
-				' . (count($outputArr['additionalDivClasses']) > 0 ? '</div>' : '') . '
-			
-				</div>
+			<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
+			' . (count($outputArr['additionalDivClasses']) > 0 ? '<div class="' . implode(' ', $outputArr['additionalDivClasses']) . '">' : '') . '
+		
+			<textarea class="form-control ' . implode(' ', $outputArr['additionalFldClasses']) . '" '
+					. NFormBase::getFldAttributes($options, $required) 
+					. '></textarea>
+		
+			' . (isset($options['description']) && strlen($options['description']) > 0 ? '<span class="help-block">' . $options['description'] . '</span>' : '') . '
+			' . (count($outputArr['additionalDivClasses']) > 0 ? '</div>' : '') . '
+		
 			</div>
 		</div>' . "\n\n";
 		echo $build_field;
@@ -120,17 +122,15 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 		$formOptions = &self::$forms[self::$openForm];
 		
 		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
-		$build_field ='<div class="'.$col.' mb-3">'.'
+		$build_field ='<div class="'.$col.' form-group">'.'
 			'.$label_output.'
-			<div class="controls">
-				<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
+			<div class="'.implode(' ', $outputArr['additionalDivClasses']).'">
 
-				<select class="form-control" ' . NFormBase::getFldAttributes($options, $required) . ' style="width:100%">
-				</select>
+			<select class="form-control" ' . NFormBase::getFldAttributes($options, $required) . ' style="width:100%">
+			</select>
+		
+			' . (isset($options['description']) && strlen($options['description']) > 0 ? '<span class="help-block">' . $options['description'] . '</span>' : '') . '
 			
-				' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
-				
-				</div>
 			</div>
 		</div>' . "\n\n";
 		echo $build_field;

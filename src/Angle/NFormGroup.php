@@ -16,7 +16,10 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 	static function inputBuild ($col, $label, $required, $options, $outputArr) {
 		$formOptions = &self::$forms[self::$openForm];
 
-		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
+		$label_output = '';
+		if (!is_null($label)) {
+			$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
+		}
 		$build_field ='<div class="'.$col.' mb-3">'.'
 			'.$label_output.'
 			<div class="controls">
@@ -48,7 +51,10 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 	static function textareaBuild ($col, $label, $required, $options, $outputArr) {
 		$formOptions = &self::$forms[self::$openForm];
 
-		$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
+		$label_output = '';
+		if (!is_null($label)) {
+			$label_output = '<label>' . $label.' '.$outputArr['requiredLabel'] . '</label>';
+		}
 		$build_field ='<div class="'.$col.' mb-3">'.'
 			'.$label_output.'
 			<div class="controls">
