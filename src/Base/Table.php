@@ -213,13 +213,15 @@ class Table {
 				}
 				if (isset($header['sort'])) {
 					$qstring = array('sort='.$header['sort']);
-					if ($header['sort'] == $_GET['sort'] && $_GET['dir'] != 'desc')
+					if (isset($_GET['sort']) && isset($_GET['dir'])
+					&& $header['sort'] == $_GET['sort'] && $_GET['dir'] != 'desc')
 						$qstring[] = 'dir=desc';
 					$headerOptions[] = 'onclick="document.location=\''.StyleLib::strip_query_param(array('sort', 'dir'), $qstring).'\'"';
 					
-					if ($header['sort'] == $_GET['sort'] && $_GET['dir'] == 'desc')
+					if (isset($_GET['sort']) && isset($_GET['dir'])
+					&& $header['sort'] == $_GET['sort'] && $_GET['dir'] == 'desc')
 						$order_chevron = '<div class="pull-right"><span class="fa fa-sort-desc text-muted"></span></div>';
-					elseif ($header['sort'] == $_GET['sort'])
+					elseif (isset($_GET['sort']) && $header['sort'] == $_GET['sort'])
 						$order_chevron = '<div class="pull-right"><span class="fa fa-sort-asc text-muted"></span></div>';
 					else
 						$order_chevron = '<div class="pull-right"><span class="fa fa-sort text-muted"></span></div>';
@@ -336,7 +338,16 @@ class Table {
 			if (count($keys) > 0) {
 				$rowValues = array();
 				foreach ($keys as $k) {
-					$rowValues[] = $row[$k];
+					$subkeys = explode('.', $k);
+					$value = $row;
+					foreach ($subkeys as $subk) {
+						if (isset($row->$subk)) {
+							$value = $value->$subk;
+						} else {
+							$value = $value[$subk];
+						}
+					}
+					$rowValues[] = $value;
 				}
 			} else {
 				$rowValues = $row;
@@ -389,6 +400,7 @@ class Table {
 					if (isset($button['disabled']) && $button['disabled']) {
 						$btndisabled = 'disabled';
 						$button['href'] = '#';
+						$button['class'] .= ' disabled';
 						$warn = '';
 					} else
 						$btndisabled = '';
