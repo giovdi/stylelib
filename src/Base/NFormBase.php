@@ -135,8 +135,7 @@ class NFormBase {
 		StyleBaseClass::checkOption($options['id'], 'input'.rand(100000,999999));
 		$options['name'] = $name;
 		
-		// aggiungi ai fields del form
-		$formOptions['fields'][] = array('name' => $options['name'], 'id' => $options['id'], 'type' => 'input');
+		// define output options array
 		$outputArr = array(
 			'requiredLabel' => '',
 			'additionalDivClasses' => array(),
@@ -171,6 +170,13 @@ class NFormBase {
 			echo '$("#'.$options['id'].'").val(\'' . StyleBaseClass::jsReplace($options['value']) . '\');' . "\n";
 			echo '});</script>';
 		}
+
+		// add field to form fields
+		$formOptions['fields'][] = array(
+			'name' => $options['name'],
+			'id' => $options['id'],
+			'type' => 'input'
+		);
 	}
 
 	/* ***** variante: email ***** */
@@ -265,8 +271,7 @@ class NFormBase {
 		StyleBaseClass::checkOption($options['id'], 'textarea'.rand(100000,999999));
 		$options['name'] = $name;
 		
-		// aggiungi ai fields del form
-		$formOptions['fields'][] = array('name' => $options['name'], 'id' => $options['id'], 'type' => 'textarea');
+		// define output options array
 		$outputArr = array(
 			'requiredLabel' => '',
 			'additionalDivClasses' => array(),
@@ -293,6 +298,13 @@ class NFormBase {
 			echo '$("#'.$options['id'].'").val(\'' . StyleBaseClass::jsReplace($options['value']) . '\');' . "\n";
 			echo '});</script>';
 		}
+
+		// add field to form fields
+		$formOptions['fields'][] = array(
+			'name' => $options['name'],
+			'id' => $options['id'],
+			'type' => 'textarea'
+		);
 	}
 
 	/* ***** variante: wysiwyg ***** */
@@ -310,6 +322,7 @@ class NFormBase {
 		StyleBaseClass::checkOption($options['id'], 'checkbox'.rand(100000,999999));
 		StyleBaseClass::checkOption($options['radio'], false);
 
+		// define output options array
 		$outputArr = array(
 			'requiredLabel' => '',
 			'additionalDivClasses' => array(),
@@ -363,9 +376,15 @@ class NFormBase {
 			StyleBaseClass::checkOption($c['id'], null);
 			$chkid = $options['id'] . (!is_null($c['id']) ? '_' . StyleLib::idGen($c['id']) : '');
 
-			// aggiungi ai fields del form
-			$formOptions['fields'][] = array('name' => $chkname, 'id' => $chkid, 'type' => 'checkbox', 'value' => !empty($c['value']) ? $c['value'] : null);
+			// add field to form fields
+			$formOptions['fields'][] = array(
+				'name' => $chkname,
+				'id' => $chkid,
+				'type' => 'checkbox',
+				'value' => !empty($c['value']) ? $c['value'] : null
+			);
 
+			// build options
 			if ($options['radio']) {
 				$checkboxTags[] = get_called_class()::radioBuild($chkname, $chkid, $c);
 			} else {
@@ -399,20 +418,13 @@ class NFormBase {
 		// INITIALIZE
 		// base options
 		StyleBaseClass::checkOption($options['id'], 'select'.rand(100000,999999));
+		StyleBaseClass::checkOption($options['noinit'], false);
 		$options['name'] = $name;
 		if (isset($options['multiple']) && $options['multiple']) {
 			$options['name'] .= '[]';
 		}
 
-		// aggiungi ai fields del form
-		StyleBaseClass::checkOption($options['noinit'], false);
-		$formOptions['fields'][] = array(
-			'name' => $options['name'],
-			'id' => $options['id'],
-			'type' => 'select',
-			'values' => $values,
-			'noinit' => $options['noinit']
-		);
+		// define output options array
 		$outputArr = array(
 			'requiredLabel' => '',
 			'additionalDivClasses' => array(),
@@ -437,9 +449,12 @@ class NFormBase {
 			$data = $options['processData'].'({items: '.json_encode($values).'}).results';
 			$select2Options['data'] = '##DATA##';
 		} elseif (isset($options['labelAsValue']) && $options['labelAsValue']) {
+			$refactored_values = array();
 			foreach ($values as $val => $lab) {
 				$data[] = array('id' => $lab, 'text' => $lab);
+				$refactored_values[$lab] = $lab;
 			}
+			$values = $refactored_values;
 			$select2Options['data'] = $data;
 		} else {
 			foreach ($values as $val => $lab) {
@@ -593,6 +608,15 @@ class NFormBase {
 			}
 			echo '});</script>';
 		}
+		
+		// add field to form fields
+		$formOptions['fields'][] = array(
+			'name' => $options['name'],
+			'id' => $options['id'],
+			'type' => 'select',
+			'values' => $values,
+			'noinit' => $options['noinit']
+		);
 	}
 
 	/* ***** variante: select ajax ***** */
@@ -671,11 +695,11 @@ class NFormBase {
 		// INITIALIZE
 		StyleBaseClass::checkOption($id, 'hidden'.rand(100000,999999));
 
-		// aggiungi ai fields del form
-		$formOptions['fields'][] = array('name' => $name, 'id' => $id, 'type' => 'hidden');
-
 		echo '<input name="' . $name . '" id="' . $id . '" type="hidden">
 			<script type="text/javascript">$("#' . $id . '").val(\'' . StyleBaseClass::jsReplace($value) . '\');</script>';
+
+		// add field to form fields
+		$formOptions['fields'][] = array('name' => $name, 'id' => $id, 'type' => 'hidden');
 	}
 
 	/* ***************** FILL FORM ***************** */
