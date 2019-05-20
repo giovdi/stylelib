@@ -41,7 +41,7 @@ class NForm extends \DeployStudio\Style\Base\NForm {
 				'.$options['appendBtn'].'
 				</div>' : '').'
 
-			' . (strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
+			' . (strlen($options['description']) > 0 ? '<p class="help-block">' . $options['description'] . '</p>' : '') . '
 			</div>
 			
 			</div>
@@ -66,7 +66,7 @@ class NForm extends \DeployStudio\Style\Base\NForm {
 					. NFormBase::getFldAttributes($options, $required) 
 					. '></textarea>
 		
-			' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
+			' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block">' . $options['description'] . '</p>' : '') . '
 			' . (count($outputArr['additionalDivClasses']) > 0 ? '</div>' : '') . '
 		
 			</div>
@@ -84,7 +84,7 @@ class NForm extends \DeployStudio\Style\Base\NForm {
 		
 			' . implode("\n", $checkboxTags) . '
 		
-			' . (!empty($options['description']) ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
+			' . (!empty($options['description']) ? '<p class="help-block">' . $options['description'] . '</p>' : '') . '
 			' . (!empty($outputArr['additionalDivClasses']) ? '</div>' : '') . '
 		
 			</div>
@@ -98,7 +98,7 @@ class NForm extends \DeployStudio\Style\Base\NForm {
 			' . ($c['required'] ? 'data-rule-required="true"' : '') . ' 
 			' . ($c['disabled'] ? 'disabled' : '') . '
 			>
-			&nbsp;<label for="' . $chkid . '">' . $c['label'].'</label>'
+			<label for="' . $chkid . '">' . $c['label'].'</label>'
 							. (strlen($c['label']) > 0 && $c['required'] ? ' <font color="red">*</font>' : '') . '
 		</div>
 		';
@@ -119,7 +119,7 @@ class NForm extends \DeployStudio\Style\Base\NForm {
 					<select class="form-control" ' . NFormBase::getFldAttributes($options, $required) . ' style="width:100%">
 					</select>
 				
-					' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block"><small class="text-muted">' . $options['description'] . '</small>' : '') . '
+					' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block">' . $options['description'] . '</p>' : '') . '
 					
 				</div>
 			</div><div class="hr-line-dashed"></div>' . "\n\n";

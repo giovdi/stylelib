@@ -9,7 +9,7 @@ class Table extends \DeployStudio\Style\Base\Table {
 	static function open ($icona, $titolo, $azioni, $headers, $options = array()) {
 		StyleBaseClass::checkOption($options['colclass'], 'col-md-12');
 		StyleBaseClass::checkOption($options['border_status'], null);
-		StyleBaseClass::checkOption($options['tableClass'], 'table-striped');
+		StyleBaseClass::checkOption($options['tableClass'], 'table-striped table-bordered');
 
 		Box::openBase($options['colclass']);
 		StyleBaseClass::divOpen('box');

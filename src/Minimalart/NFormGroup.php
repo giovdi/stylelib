@@ -41,7 +41,7 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 				'.$options['appendBtn'].'
 				</div>' : '').'
 			</div>
-			'.(strlen($options['description']) > 0 ? '<span class="help-block">'.$options['description'].'</span>' : '').'
+			'.(strlen($options['description']) > 0 ? '<p class="help-block">'.$options['description'].'</p>' : '').'
 
 		</div>'."\n\n";
 		echo $build_field;
@@ -59,7 +59,7 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 		
 			' . implode("\n", $checkboxTags) . '
 		
-			' . (!empty($options['description']) ? '<span class="help-block">' . $options['description'] . '</span>' : '') . '
+			' . (!empty($options['description']) ? '<p class="help-block">' . $options['description'] . '</p>' : '') . '
 			' . (!empty($outputArr['additionalDivClasses']) ? '</div>' : '') . '
 		
 			</div>
@@ -83,7 +83,7 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 					. NFormBase::getFldAttributes($options, $required) 
 					. '></textarea>
 		
-			' . (isset($options['description']) && strlen($options['description']) > 0 ? '<span class="help-block">' . $options['description'] . '</span>' : '') . '
+			' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block">' . $options['description'] . '</p>' : '') . '
 			' . (count($outputArr['additionalDivClasses']) > 0 ? '</div>' : '') . '
 		
 			</div>
@@ -98,7 +98,7 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 			' . ($c['required'] ? 'data-rule-required="true"' : '') . ' 
 			' . ($c['disabled'] ? 'disabled' : '') . '
 			>
-			&nbsp;<label for="' . $chkid . '">' . $c['label'].'</label>'
+			<label for="' . $chkid . '">' . $c['label'].'</label>'
 							. (strlen($c['label']) > 0 && $c['required'] ? ' <font color="red">*</font>' : '') . '
 		</div>
 		';
@@ -129,7 +129,7 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 			<select class="form-control" ' . NFormBase::getFldAttributes($options, $required) . ' style="width:100%">
 			</select>
 		
-			' . (isset($options['description']) && strlen($options['description']) > 0 ? '<span class="help-block">' . $options['description'] . '</span>' : '') . '
+			' . (isset($options['description']) && strlen($options['description']) > 0 ? '<p class="help-block">' . $options['description'] . '</p>' : '') . '
 			
 			</div>
 		</div>' . "\n\n";
