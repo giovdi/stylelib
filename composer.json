@@ -10,5 +10,12 @@
 	"require": {
 		"php": ">=5.2",
 		"philo/laravel-blade": "3.*"
+	},
+	"extra": {
+		"laravel": {
+			"providers": [
+				"DeployStudio\\Style\\Providers\\PackageServiceProvider"
+			]
+		}
 	}
 }

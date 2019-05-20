@@ -860,7 +860,7 @@ class NFormBase {
 	}
 
 	static function submit() {
-		NFormBase::submitCustom('fa fa-save', 'Salva', true, array());
+		NFormBase::submitCustom('fa fa-save', __('universal_stylelib::stylelib.save'), true, array());
 	}
 
 	static function submitAsAjax($redirect, $other_actions = array()) {
