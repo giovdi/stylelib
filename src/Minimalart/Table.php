@@ -11,6 +11,7 @@ class Table extends \DeployStudio\Style\Base\Table {
 		StyleBaseClass::checkOption($options['border_status'], null);
 		StyleBaseClass::checkOption($options['tableClass'], 'table-striped table-bordered');
 
+		$options['box'] = true;
 		Box::openBase($options['colclass']);
 		StyleBaseClass::divOpen('box');
 
@@ -37,30 +38,46 @@ class Table extends \DeployStudio\Style\Base\Table {
 		StyleBaseClass::checkOption($options['colclass'], 'col-md-12');
 		StyleBaseClass::checkOption($options['tableClass'], 'table-striped');
 
+		$options['box'] = true;
 		Box::openBase($options['colclass']);
-		StyleBaseClass::divOpen('card');
-		StyleBaseClass::divOpen('card-body');
+		StyleBaseClass::divOpen('box');
+		StyleBaseClass::divOpen('box-body no-padding');
+		StyleBaseClass::divOpen('table-responsive', null, '');
 
+		parent::openTable($headers, $options);
+	}
+
+	static function openNoBox ($headers, $options = array()) {
+		StyleBaseClass::checkOption($options['colclass'], 'col-md-12');
+		StyleBaseClass::checkOption($options['tableClass'], 'table-striped');
+
+		$options['box'] = false;
+		StyleBaseClass::divOpen('table-responsive', null, '');
 		parent::openTable($headers, $options);
 	}
 
 	static function close($azioniMultiple = array()) {
 		$options = self::$tables[self::$openTable];
 
+		// close table
 		parent::close($azioniMultiple);
 		StyleBaseClass::divClose();
-		StyleBaseClass::divClose();
 
-		if (isset($options['totalElements']) && $options['totalElements'] > 0) {
-			StyleBaseClass::divOpen('box-footer clearfix');
-			//StyleBaseClass::divOpen('box-tools');
-			parent::paginazione($options['totalElements'], $options['pagerSelected']);
-			//StyleBaseClass::divClose();
+		// close box if previously opened
+		if ($options['box']) {;
 			StyleBaseClass::divClose();
-		}
 
-		StyleBaseClass::divClose();
-		Box::closeBase($azioniMultiple);
+			if (isset($options['totalElements']) && $options['totalElements'] > 0) {
+				StyleBaseClass::divOpen('box-footer clearfix');
+				//StyleBaseClass::divOpen('box-tools');
+				parent::paginazione($options['totalElements'], $options['pagerSelected']);
+				//StyleBaseClass::divClose();
+				StyleBaseClass::divClose();
+			}
+
+			StyleBaseClass::divClose();
+			Box::closeBase($azioniMultiple);
+		}
 	}
 
 	static function cellCheckbox($id, $disabled = false, $checked = false) {
