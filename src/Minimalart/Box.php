@@ -5,17 +5,18 @@ use \DeployStudio\Style\Base;
 use \DeployStudio\Style\StyleBaseClass;
 
 class Box extends \DeployStudio\Style\Base\Box {
+
 	static function open ($box_col = 'col-12', $id = null) {
 		parent::openBase($box_col, $id);
 		StyleBaseClass::divOpen('box');
 		StyleBaseClass::divOpen('box-body');
 	}
 		
-	static function openTitolo ($icona, $titolo, $box_col = 'col-12', $id = null) {
+	static function openTitolo ($icona, $titolo, $box_col = 'col-12', $id = null, $bg_header = null) {
 		parent::openBase($box_col, $id);
 		StyleBaseClass::divOpen('box');
 
-		StyleBaseClass::divOpen('box-header with-border');
+		StyleBaseClass::divOpen('box-header with-border '.(!is_null($bg_header) ? 'bg-'.$bg_header : ''));
 		echo '<h3 class="box-title"><i class="'.$icona.'"></i> '.$titolo.'</h3>';
 		StyleBaseClass::divClose();
 		

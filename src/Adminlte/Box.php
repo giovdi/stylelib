@@ -8,13 +8,13 @@ class Box extends \DeployStudio\Style\Base\Box {
 
 	static function open ($box_col = 'col-xs-12', $id = null, $border_status = null) {
 		parent::openBase($box_col, $id);
-		StyleBaseClass::divOpen('box '.($border_status != null ? 'box-'.$border_status : ''));
+		StyleBaseClass::divOpen('box '.(!is_null($border_status) ? 'box-'.$border_status : ''));
 		StyleBaseClass::divOpen('box-body');
 	}
 		
 	static function openTitolo ($icona, $titolo, $box_col = 'col-xs-12', $id = null, $border_status = null) {
 		parent::openBase($box_col, $id);
-		StyleBaseClass::divOpen('box '.($border_status != null ? 'box-'.$border_status : ''));
+		StyleBaseClass::divOpen('box '.(!is_null($border_status) ? 'box-'.$border_status : ''));
 
 		StyleBaseClass::divOpen('box-header with-border');
 		echo '<h3 class="box-title"><span class="'.$icona.'"></span> '.$titolo.'</h3>';
