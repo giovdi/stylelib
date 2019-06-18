@@ -204,7 +204,7 @@ class NFormBase {
 		// opzioni campo input
 		$options = $options;
 		if (isset($options['value'])) {
-			$options['value'] = date('d/m/Y', strtotime($options['value']));
+			$options['value'] = date('d/m/Y H:i', strtotime($options['value']));
 		}
 
 		$options['additionalDivClasses'] = array_merge($options['additionalDivClasses'], array('date'));
@@ -246,8 +246,9 @@ class NFormBase {
 		
 		// opzioni campo input
 		$options = $options;
-		if (isset($options['value'])) {
-			$options['value'] = date('d/m/Y', strtotime($options['value']));
+		if (isset($options['value_start']) && isset($options['value_end'])) {
+			$options['value'] = date('d/m/Y', strtotime($options['value_start']))
+			.' - '.date('d/m/Y', strtotime($options['value_end']));
 		}
 
 		$options['additionalDivClasses'] = array_merge($options['additionalDivClasses'], array('daterange'));
@@ -272,8 +273,9 @@ class NFormBase {
 		
 		// opzioni campo input
 		$options = $options;
-		if (isset($options['value'])) {
-			$options['value'] = date('d/m/Y', strtotime($options['value']));
+		if (isset($options['value_start']) && isset($options['value_end'])) {
+			$options['value'] = date('d/m/Y H:i', strtotime($options['value_start']))
+			.' - '.date('d/m/Y H:i', strtotime($options['value_end']));
 		}
 
 		$options['additionalDivClasses'] = array_merge($options['additionalDivClasses'], array('datetimerange'));
