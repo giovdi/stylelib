@@ -229,14 +229,65 @@ class NFormBase {
 			$options['value'] = date('d/m/Y', strtotime($options['value']));
 		}
 
-		$options['dateformat'] = 'dd/MM/yyyy HH:mm:ss PP';
-		$options['additionalDivClasses'] = array_merge($options['additionalDivClasses'], array('datetimepicker'));
-		$options['prepend'] = '<span data-date-icon="fa fa-calendar" data-time-icon="fa fa-time"></span>';
+		$options['additionalDivClasses'] = array_merge($options['additionalDivClasses'], array('datetime'));
+		$options['prepend'] = '<span class="fa fa-calendar"></span>';
 		
 		// campo hidden
 		$hiddenValue = empty($options['value']) ? '' : $options['value'];
 		$hiddenid = $options['id'].'_hidden';
 		NFormBase::hidden($name, $hiddenValue, $hiddenid);
+	}
+
+	/* ***** variante: daterangepicker ***** */
+	static function daterangepickerBase($name, &$options) {
+		// definisci qui un id per poterlo replicare nell'hidden
+		StyleBaseClass::checkOption($options['id'], 'input'.rand(100000,999999));
+		StyleBaseClass::checkOption($options['additionalDivClasses'], array());
+		
+		// opzioni campo input
+		$options = $options;
+		if (isset($options['value'])) {
+			$options['value'] = date('d/m/Y', strtotime($options['value']));
+		}
+
+		$options['additionalDivClasses'] = array_merge($options['additionalDivClasses'], array('daterange'));
+		$options['prepend'] = '<span class="fa fa-calendar"></span>';
+
+		// campo hidden start
+		$hiddenValue = empty($options['value']) ? '' : $options['value'];
+		$hiddenid = $options['id'].'_hidden_start';
+		NFormBase::hidden($name.'_start', $hiddenValue, $hiddenid);
+		
+		// campo hidden end
+		$hiddenValue = empty($options['value']) ? '' : $options['value_to'];
+		$hiddenid = $options['id'].'_hidden_end';
+		NFormBase::hidden($name.'_end', $hiddenValue, $hiddenid);
+	}
+	
+	/* ***** variante: datetimerangepicker ***** */
+	static function datetimerangepickerBase($name, &$options) {
+		// definisci qui un id per poterlo replicare nell'hidden
+		StyleBaseClass::checkOption($options['id'], 'input'.rand(100000,999999));
+		StyleBaseClass::checkOption($options['additionalDivClasses'], array());
+		
+		// opzioni campo input
+		$options = $options;
+		if (isset($options['value'])) {
+			$options['value'] = date('d/m/Y', strtotime($options['value']));
+		}
+
+		$options['additionalDivClasses'] = array_merge($options['additionalDivClasses'], array('datetimerange'));
+		$options['prepend'] = '<span class="fa fa-calendar"></span>';
+
+		// campo hidden start
+		$hiddenValue = empty($options['value']) ? '' : $options['value'];
+		$hiddenid = $options['id'].'_hidden_start';
+		NFormBase::hidden($name.'_start', $hiddenValue, $hiddenid);
+		
+		// campo hidden end
+		$hiddenValue = empty($options['value']) ? '' : $options['value_to'];
+		$hiddenid = $options['id'].'_hidden_end';
+		NFormBase::hidden($name.'_end', $hiddenValue, $hiddenid);
 	}
 	
 	/* ***** variante: clockpicker ***** */

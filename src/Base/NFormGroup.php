@@ -50,8 +50,18 @@ class NFormGroup extends NFormBase {
 	}
 
 	static function datetimepicker($col, $label, $name, $required = false, $options = array()) {
-		parent::datepickerBase($name, $options);
-		self::input($col, $label, $name, $required, $options);
+		parent::datetimepickerBase($name, $options);
+		self::input($col, $label, $name.'_in', $required, $options);
+	}
+
+	static function daterangepicker($col, $label, $name, $required = false, $options = array()) {
+		parent::daterangepickerBase($name, $options);
+		self::input($col, $label, $name.'_in', $required, $options);
+	}
+
+	static function datetimerangepicker($col, $label, $name, $required = false, $options = array()) {
+		parent::datetimerangepickerBase($name, $options);
+		self::input($col, $label, $name.'_in', $required, $options);
 	}
 
 	static function clockpicker($col, $label, $name, $required = false, $options = array()) {

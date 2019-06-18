@@ -8,6 +8,12 @@ La documentazione ufficiale è disponibile su [doc.dev.pixelstyle.it](http://doc
 
 Qui è descritta una breve documentazione tecnica che regola gli sviluppi futuri.
 
+### IMPORTANTE
+
+Gli assets (js e css) sono su Athena, in `/home/pixelstyleit/domains/stylelib.pixelstyle.it/public_html` e sono sotto cache di CloudFlare.
+
+In caso di modifiche agli assets, per vederle subito _live_, è importante impostare la modalità sviluppatore di CloudFlare.
+
 ### Form e FormGroup class
 
 La Form class e la FormGroup class si dividono in 3 files base e 2 files per tema
