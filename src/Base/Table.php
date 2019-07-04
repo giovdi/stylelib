@@ -170,7 +170,11 @@ class Table {
 		
 	static function openTable($headers, $options) {
 		StyleBaseClass::checkOption($options['id'], 'table'.rand(1000,9999));
+		StyleBaseClass::checkOption($options['sort'], '');
+		StyleBaseClass::checkOption($options['sort_dir'], '');
 		$id = $options['id'];
+		$sort = $options['sort'];
+		$sort_dir = $options['sort_dir'];
 
 		self::$openTable = $id;
 		self::$tables[$id] = &$options;
@@ -213,18 +217,17 @@ class Table {
 				}
 				if (isset($header['sort'])) {
 					$qstring = array('sort='.$header['sort']);
-					if (isset($_GET['sort']) && isset($_GET['dir'])
-					&& $header['sort'] == $_GET['sort'] && $_GET['dir'] != 'desc')
+					if ($header['sort'] == $sort && $sort_dir != 'desc') {
 						$qstring[] = 'dir=desc';
+					}
 					$headerOptions[] = 'onclick="document.location=\''.StyleLib::strip_query_param(array('sort', 'dir'), $qstring).'\'"';
 					
-					if (isset($_GET['sort']) && isset($_GET['dir'])
-					&& $header['sort'] == $_GET['sort'] && $_GET['dir'] == 'desc')
-						$order_chevron = '<div class="pull-right"><span class="fa fa-sort-desc text-muted"></span></div>';
-					elseif (isset($_GET['sort']) && $header['sort'] == $_GET['sort'])
-						$order_chevron = '<div class="pull-right"><span class="fa fa-sort-asc text-muted"></span></div>';
+					if ($header['sort'] == $sort && $sort_dir == 'desc')
+						$order_chevron = '<div class="float-right pull-right"><span class="fa fa-sort-down fa-sort-desc text-muted"></span></div>';
+					elseif ($header['sort'] == $sort)
+						$order_chevron = '<div class="float-right pull-right"><span class="fa fa-sort-up fa-sort-asc text-muted"></span></div>';
 					else
-						$order_chevron = '<div class="pull-right"><span class="fa fa-sort text-muted"></span></div>';
+						$order_chevron = '<div class="float-right pull-right"><span class="fa fa-sort text-muted"></span></div>';
 				}
 			}
 			
