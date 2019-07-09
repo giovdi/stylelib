@@ -135,7 +135,7 @@ class Table {
 						<div class="gotopage">
 							<form class="paginatorform">
 								<input type="number" class="form-control text-info"
-								title="Scrivi e premi INVIO per andare a una pagina specifica" data-toggle="tooltip" data-placement="left" />
+								title="'.__('universal_stylelib::stylelib.pager_tooltip_desktop').'" data-toggle="tooltip" data-placement="left" />
 							</form>
 						</div>
 					</li>';
@@ -155,7 +155,7 @@ class Table {
 						<form class="paginatorform">
 							<input type="number" class="form-control text-info"
 							placeholder="'.$paginator['active_page'].'/'.$paginator['num_pages'].'"
-							title="Scrivi e conferma per andare a una pagina specifica" data-toggle="tooltip" data-placement="left" />
+							title="'.__('universal_stylelib::stylelib.pager_tooltip_mobile').'" data-toggle="tooltip" data-placement="left" />
 						</form>
 					</div>
 				</li>
@@ -164,7 +164,7 @@ class Table {
 
 		// paginazione - select elementi per pagina
 		echo '<div class="pull-right hidden-xs d-none d-sm-block paginator-items-page">
-			Per pagina: <select class="pager" style="width:75px"></select></div>';
+		'.__('universal_stylelib::stylelib.per_page').': <select class="pager" style="width:75px"></select></div>';
 		echo '<script>var itemsPage = '.$paginator['items_page'].';</script>';
 	}
 		
@@ -262,7 +262,7 @@ class Table {
 				
 				if (isset($header['filter']) && strlen($header['filter']) > 0) {
 					echo '<th '.implode(' ', $headerOptions).'><input type="text" class="form-control table-filter" '
-						.'title="Scrivi e premi INVIO per filtrare" data-toggle="tooltip" '
+						.'title="'.__('universal_stylelib::stylelib.filter_tooltip').'" data-toggle="tooltip" '
 						.'data-placement="bottom" onkeypress="if(event.keyCode == 13) tableFilterSearch(event, this);" '
 						.'data-sfilter="'.$header['filter'].'" '.$autofocus.' />';
 					if (isset($_GET['f'.$header['filter']]) && strlen($_GET['f'.$header['filter']]) > 0) {
@@ -303,7 +303,7 @@ class Table {
 		if (count($azioniMultiple) > 0) {
 			StyleBaseClass::divOpen('form-group azioniMultiple');
 
-			echo '<label class="col-sm-2 control-label">Elementi selezionati:</label>';
+			echo '<label class="col-sm-2 control-label">'.__('universal_stylelib::stylelib.multiple_actions_items').':</label>';
 
 			StyleBaseClass::colOpen('col-sm-2');
 			echo '<select name="multipleAction" class="form-control multipleAction">';
@@ -395,7 +395,7 @@ class Table {
 					if (isset($button['confirm']) && isset($button['confirm_text']) && $button['confirm'] && strlen($button['confirm_text'])) {
 						$warn = ' onclick="if(!confirm(\''.str_replace("'", "\\'", $button['confirm_text']).'\')) return false;"';
 					} elseif (isset($button['confirm']) && $button['confirm']) {
-						$warn = ' onclick="if(!confirm(\'Sei sicuro?\')) return false;"';
+						$warn = ' onclick="if(!confirm(\''.__('universal_stylelib::stylelib.delete_question').'\')) return false;"';
 					} else {
 						$warn = '';
 					}

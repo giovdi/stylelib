@@ -520,9 +520,9 @@ class NFormBase {
 		if (isset($options['placeholder'])) {
 			$select2Options['placeholder'] = $options['placeholder'];
 		} elseif (isset($options['custom']) && $options['custom']) {
-			$select2Options['placeholder'] = 'Seleziona oppure scrivi e premi INVIO per personalizzare';
+			$select2Options['placeholder'] = __('universal_stylelib::stylelib.select_enter');
 		} else {
-			$select2Options['placeholder'] = 'Seleziona';
+			$select2Options['placeholder'] = __('universal_stylelib::stylelib.select');
 		}
 
 		// altre opzioni select2
@@ -931,20 +931,18 @@ class NFormBase {
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h4 class="modal-title">Avviso</h4>
+								<h4 class="modal-title">'.__('universal_stylelib::stylelib.ajax_warning').'</h4>
 								</div>
 								<div class="modal-body">
 									<p>
 										<span class="text-danger fa fa-exclamation-circle"></span>
-										Attenzione: il server ha restituito il seguente messaggio.<br>
-										Contatta il team di sviluppo per maggiori informazioni. Grazie.<br>
-										Clicca su Continua per proseguire
+										'.__('universal_stylelib::stylelib.ajax_message').'
 								<div id="status" style="max-height: 300px; overflow: auto">
 								</div>
 							</div>
 							<div class="modal-footer">
 								<a href="<?php echo $redirect ?>"
-									class="btn btn-primary">Continua</a>
+									class="btn btn-primary">'.__('universal_stylelib::stylelib.continue').'</a>
 							</div>
 						</div>
 						<!-- /.modal-content -->
