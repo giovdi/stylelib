@@ -8,7 +8,7 @@ class Table extends \DeployStudio\Style\Base\Table {
 
 	static function open ($icona, $titolo, $azioni, $headers, $options = array()) {
 		StyleBaseClass::checkOption($options['colclass'], 'col-md-12');
-		StyleBaseClass::checkOption($options['border_status'], null);
+		StyleBaseClass::checkOption($options['bg_header'], null);
 		StyleBaseClass::checkOption($options['tableClass'], 'table-striped table-bordered');
 
 		$options['box'] = true;
@@ -16,7 +16,7 @@ class Table extends \DeployStudio\Style\Base\Table {
 		StyleBaseClass::divOpen('box');
 
 		// intestazione box
-		StyleBaseClass::divOpen('box-header with-border');
+		StyleBaseClass::divOpen('box-header with-border '.(!is_null($options['bg_header']) ? 'bg-'.$options['bg_header'] : ''));
 		echo '<h3 class="box-title"><i class="'.$icona.'"></i> '.$titolo.'</h3>';
 		parent::azioniIntestazione($azioni);
 

@@ -12,7 +12,7 @@ class Table extends \DeployStudio\Style\Base\Table {
 		StyleBaseClass::checkOption($options['tableClass'], 'table-hover');
 
 		Box::openBase($options['colclass']);
-		StyleBaseClass::divOpen('box '.($options['border_status'] != null ? 'box-'.$border_status : ''));
+		StyleBaseClass::divOpen('box '.($options['border_status'] != null ? 'box-'.$options['border_status'] : ''));
 
 		// intestazione box
 		StyleBaseClass::divOpen('box-header with-border');
