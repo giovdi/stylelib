@@ -374,6 +374,7 @@ class NFormBase {
 		// base options
 		StyleBaseClass::checkOption($options['id'], 'checkbox'.rand(100000,999999));
 		StyleBaseClass::checkOption($options['radio'], false);
+		StyleBaseClass::checkOption($options['value'], array());
 
 		// define output options array
 		$outputArr = array(
@@ -394,6 +395,11 @@ class NFormBase {
 		// mostra l'asterisco se c'e' la required nella prima chiave (se true, vale per tutte)
 		if ($options['radio'] && $checkboxes[$primachiave]['required']) {
 			$outputArr['requiredLabel'] = '<font color="red">*</font> ';
+		}
+
+		// VALUE
+		if (!is_array($options['value'])) {
+			$options['value'] = array($options['value']);
 		}
 
 		// BUILD CHECKBOXES
@@ -429,13 +435,25 @@ class NFormBase {
 			StyleBaseClass::checkOption($c['id'], null);
 			$chkid = $options['id'] . (!is_null($c['id']) ? '_' . StyleLib::idGen($c['id']) : '');
 
+			// checkbox value
+			$chkvalue = !empty($c['value']) ? $c['value'] : null;
+
 			// add field to form fields
 			$formOptions['fields'][] = array(
 				'name' => $chkname,
 				'id' => $chkid,
 				'type' => 'checkbox',
-				'value' => !empty($c['value']) ? $c['value'] : null
+				'value' => $chkvalue
 			);
+
+			// check main value
+			if (count($options['value']) > 0 &&
+				($options['value'][0] == 'on' || (!is_null($chkvalue) && in_array($chkvalue, $options['value'])))) {
+				echo '<script type="text/javascript">' . "\n";
+				echo '$(function() {' . "\n";
+				echo '$("#'.$chkid.'").prop("checked", true);' . "\n";
+				echo '});</script>';
+			}
 
 			// build options
 			if ($options['radio']) {
@@ -443,23 +461,6 @@ class NFormBase {
 			} else {
 				$checkboxTags[] = get_called_class()::checkboxBuild($chkname, $chkid, $c);
 			}
-		}
-
-		// VALUE
-		if (isset($options['value']) && !is_array($options['value'])) {
-			$options['value'] = array($options['value']);
-		}
-		if (isset($options['value']) && is_array($options['value']) && count($options['value']) > 0) {
-			echo '<script type="text/javascript">' . "\n";
-			echo '$(function() {' . "\n";
-			foreach ($options['value'] as $val) {
-				if ($val == 'on') {
-					echo '$("#'.$options['id'].'").prop("checked", true);' . "\n";
-				} else {
-					echo '$("#'.$options['id'].'[value=\\"'.$val.'\\"]").prop("checked", true);' . "\n";
-				}
-			}
-			echo '});</script>';
 		}
 	}
 
