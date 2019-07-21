@@ -276,12 +276,15 @@ class Table {
 						if ($_GET['f'.$header['datefilter'].'_start'] != $_GET['f'.$header['datefilter'].'_end']) {
 							$daterange_filtered .= ' > ' . date('d/m/Y', $_GET['f'.$header['datefilter'].'_end'] / 1000);
 						}
+					} else {
+						$daterange_filtered = __('universal_stylelib::stylelib.datefilter_notset');
 					}
 					
 					echo '<th '.implode(' ', $headerOptions).'><a href="javascript:;" class="form-control btn btn-sm btn-default" '
 						.'id="f'.$header['datefilter'].'" style="margin-bottom:0px;text-align:left"><span class="fa fa-calendar"></span> '
-						.'<i>'.$daterange_filtered.'</i></a></th>';
-					StyleBaseClass::getView('tableDetafilterJs', array('datefilter' => $header['datefilter']));
+						.'<i>'.$daterange_filtered.'</i></a>';
+					echo StyleBaseClass::getView('tableDatefilterJs', array('datefilter' => $header['datefilter']));
+					echo '</th>';
 
 				} else {
 					echo '<th '.implode(' ', $headerOptions).'></th>';
