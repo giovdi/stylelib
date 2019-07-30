@@ -91,6 +91,14 @@ class NFormBase {
 			$attr[] = 'data-rule-min="' . $options['min'] . '"';
 		if (isset($options['max']) && $options['max'])
 			$attr[] = 'data-rule-max="' . $options['max'] . '"';
+		if (isset($options['minlength']) && $options['minlength'])
+			$attr[] = 'data-rule-minlength="' . $options['minlength'] . '"';
+		if (isset($options['maxlength']) && $options['maxlength'])
+			$attr[] = 'data-rule-maxlength="' . $options['maxlength'] . '"';
+		if (isset($options['length']) && $options['length'])
+			$attr[] = 'data-rule-minlength="' . $options['length'] . '"';
+		if (isset($options['length']) && $options['length'])
+			$attr[] = 'data-rule-maxlength="' . $options['length'] . '"';
 		if (isset($options['date']) && $options['date'])
 			$attr[] = 'data-rule-date="true"';
 		if (isset($options['dateITA']) && $options['dateITA'])
@@ -114,6 +122,8 @@ class NFormBase {
 			$attr[] = 'onkeyup="' . $options['onkeyup'] . '"';
 		if (isset($options['maxlength']))
 			$attr[] = 'maxlength="' . $options['maxlength'] . '"';
+		if (isset($options['length']))
+			$attr[] = 'maxlength="' . $options['length'] . '"';
 		if (isset($options['disabled']) && $options['disabled'])
 			$attr[] = 'disabled';
 		if (isset($options['multiple']) && $options['multiple'])
