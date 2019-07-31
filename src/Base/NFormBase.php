@@ -539,12 +539,12 @@ class NFormBase {
 		// altre opzioni select2
 		StyleBaseClass::checkOption($options['custom'], false);
 		$select2Options['tags'] = $options['custom'];
-
 		StyleBaseClass::checkOption($options['clear'], false);
 		$select2Options['allowClear'] = $options['clear'];
-
-		StyleBaseClass::checkOption($options['minLength'], 0);
-		$select2Options['minimumInputLength'] = $options['minLength'];
+		StyleBaseClass::checkOption($options['minlength'], 0);
+		$select2Options['minimumInputLength'] = $options['minlength'];
+		StyleBaseClass::checkOption($options['maxlength'], 1000);
+		$select2Options['maximumInputLength'] = $options['maxlength'];
 
 		if (isset($options['theme'])) {
 			$select2Options['theme'] = $options['theme'];
