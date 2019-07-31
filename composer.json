@@ -1,7 +1,7 @@
 {
 	"name": "deploystudio/universal-stylelib",
 	"description": "Deploy Studio Universal Style Library",
-	"version": "0.0.19",
+	"version": "0.0.20",
 	"autoload": {
 		"psr-4": {
 			"DeployStudio\\Style\\": "src"
