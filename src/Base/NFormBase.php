@@ -870,7 +870,7 @@ class NFormBase {
 
 	/* ***************** SUBMIT FORM ***************** */
 
-	static function submitOnlyButtons($save_icon, $save_label, $cancel_btn = true, $other_actions = array(), $save_button_color = 'primary') {
+	static function submitOnlyButtons($save_icon, $save_label, $cancel_btn = true, $other_actions = array(), $save_btn_class = 'primary') {
 		$formOptions = &self::$forms[self::$openForm];
 		
 		$other_actions_str = '';
@@ -888,12 +888,28 @@ class NFormBase {
 				else
 					$icon = '';
 
-				$other_actions_str .= '<a class="btn" href="' . $action['href'] . '"' . $modaldismiss . '>' . $icon . $action['label'] . '</a> ';
+				if (!empty($action['class']))
+					$class = 'btn-'.$action['class'];
+				else
+					$class = '';
+
+				// confirm text
+				StyleBaseClass::checkOption($action['confirm'], false);
+				StyleBaseClass::checkOption($action['confirm_text'], '');
+				if (isset($action['confirm']) && isset($action['confirm_text']) && $action['confirm'] && strlen($action['confirm_text'])) {
+					$warn = ' onclick="if(!confirm(\''.str_replace("'", "\\'", $action['confirm_text']).'\')) return false;"';
+				} elseif (isset($action['confirm']) && $action['confirm']) {
+					$warn = ' onclick="if(!confirm(\''.__('universal_stylelib::stylelib.delete_question').'\')) return false;"';
+				} else {
+					$warn = '';
+				}
+
+				$other_actions_str .= '<a class="btn '.$class.'"'.$warn.' href="' . $action['href'] . '"' . $modaldismiss . '>' . $icon . $action['label'] . '</a> ';
 			}
 		}
 
 		echo '
-			<button class="btn btn-' . $save_button_color . ' disabled" type="submit">
+			<button class="btn btn-' . $save_btn_class . ' disabled" type="submit">
 				<i class="' . $save_icon . '"></i> ' . $save_label . '
 			</button>
 			' . ($cancel_btn ? '<a class="btn btn-white" href="javascript:window.history.back()">' . 'Annulla' . '</a>' : '') . '
@@ -901,7 +917,7 @@ class NFormBase {
 			<script>$(function() {$(\'#'.self::$openForm.' button[type=submit]\').removeClass(\'disabled\')})</script>';
 	}
 
-	static function submitCustom($save_icon, $save_label, $cancel_btn = true, $other_actions = array(), $save_button_color = 'primary') {
+	static function submitCustom($save_icon, $save_label, $cancel_btn = true, $other_actions = array(), $save_btn_class = 'primary') {
 		$formOptions = &self::$forms[self::$openForm];
 
 		$class = str_replace('md-', 'md-offset-', $formOptions['classLabel']);
@@ -916,7 +932,7 @@ class NFormBase {
 				<div class="row">
 					<div class="'.$class.'">
 						';
-						NFormBase::submitOnlyButtons($save_icon, $save_label, $cancel_btn, $other_actions, $save_button_color);
+						NFormBase::submitOnlyButtons($save_icon, $save_label, $cancel_btn, $other_actions, $save_btn_class);
 						echo '
 					</div>
 				</div>
