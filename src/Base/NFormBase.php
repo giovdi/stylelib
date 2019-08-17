@@ -506,9 +506,12 @@ class NFormBase {
 		);
 
 		// parse data
+		StyleBaseClass::checkOption($options['dataProcessed'], false);
 		$data = array(array());
 		if (!is_array($values)) {
 			echo '<b>Debug</b>: $values for the ' . $name . ' field is not an array, please check the select declaration.';
+		} elseif ($options['dataProcessed'] && !empty($values)) {
+			$select2Options['data'] = array_merge($data, $values);
 		} elseif (isset($options['processData']) && !empty($values)) {
 			$data = $options['processData'].'({items: '.json_encode($values).'}).results';
 			$select2Options['data'] = '##DATA##';  // will be parsed as function
@@ -605,33 +608,69 @@ class NFormBase {
 		}
 
 		// init templateResult and templateSelection select2 options
-		$templateFunction = null;
+		$templateResultFunction = null;
+		$templateSelectionFunction = null;
 		StyleBaseClass::checkOption($options['html'], false);
-		if (isset($options['templateResult']) || $options['html']) {
+		StyleBaseClass::checkOption($options['templateResult'], null);
+		StyleBaseClass::checkOption($options['templateResultFunction'], false);
+		StyleBaseClass::checkOption($options['templateSelection'], null);
+		StyleBaseClass::checkOption($options['templateSelectionFunction'], false);
+		if (!is_null($options['templateResult']) || $options['html']) {
 			// add options to select2
-			$select2Options['templateResult'] = '##TPLFUNCTION##';  // will be parsed as function
-			$select2Options['templateSelection'] = '##TPLFUNCTION##';  // will be parsed as function
+			$select2Options['templateResult'] = '##TPLRESULTFUNCTION##';  // will be parsed as function
+			$select2Options['templateSelection'] = '##TPLRESULTFUNCTION##';  // will be parsed as function
 			
+			// set 'result.text' if templateResult is not set
+			StyleBaseClass::checkOption($options['templateResult'], 'result.text');
 			// add 'result.' in templateResult if missing
 			if (isset($options['templateResult']) && substr($options['templateResult'], 0, 7) != 'result.') {
 				$options['templateResult'] = 'result.'.$options['templateResult'];
 			}
-
-			// prepare templateFunction function
-			if (isset($options['templateResultFunction'])) {
-				$templateFunction = $options['templateResult'];
-			} elseif ($options['html'] && isset($options['templateResult'])) {
-				$templateFunction = 'function (result) {
-					return result.text || $('.$options['templateResult'].');
-				}';
+			
+			// prepare templateResultFunction function
+			if ($options['templateResultFunction']) {
+				$templateResultFunction = $options['templateResult'];
 			} elseif ($options['html']) {
-				$templateFunction = 'function (result) {
-					return $(result.text);
+				$templateResultFunction = 'function (result) {
+					console.log(result);
+					if ('.$options['templateResult'].' == undefined) {
+						return $("<span>").text(result.text);
+					} else {
+						return $("<span>").html('.$options['templateResult'].');
+					}
 				}';
 			} else {
-				$templateFunction = 'function (result) {
+				$templateResultFunction = 'function (result) {
 					return result.text || '.$options['templateResult'].';
 				}';
+			}
+
+			// override templateSelection select2 options
+			if (!is_null($options['templateSelection'])) {
+				// override option into select2
+				$select2Options['templateSelection'] = '##TPLSELECTIONFUNCTION##';  // will be parsed as function
+				
+				// add 'result.' in templateSelection if missing
+				if (isset($options['templateSelection']) && substr($options['templateSelection'], 0, 7) != 'result.') {
+					$options['templateSelection'] = 'result.'.$options['templateSelection'];
+				}
+				
+				// prepare templateSelectionFunction function
+				if ($options['templateSelectionFunction']) {
+					$templateSelectionFunction = $options['templateSelection'];
+				} elseif ($options['html']) {
+					$templateSelectionFunction = 'function (result) {
+						if ('.$options['templateSelection'].' == undefined) {
+							return $("<span>").text(result.text);
+						} else {
+							return $("<span>").html('.$options['templateSelection'].');
+						}
+					}';
+				} else {
+					$templateSelectionFunction = 'function (result) {
+						return result.text || '.$options['templateSelection'].';
+					}';
+				}
 			}
 		}
 
@@ -644,7 +683,8 @@ class NFormBase {
 				$select2JsonOptions = str_replace('"##DATA##"', $data, $select2JsonOptions);
 			}
 			$select2JsonOptions = str_replace('"##AJAXDATA##"', $ajax_data, $select2JsonOptions);
-			$select2JsonOptions = str_replace('"##TPLFUNCTION##"', $templateFunction, $select2JsonOptions);
+			$select2JsonOptions = str_replace('"##TPLRESULTFUNCTION##"', $templateResultFunction, $select2JsonOptions);
+			$select2JsonOptions = str_replace('"##TPLSELECTIONFUNCTION##"', $templateSelectionFunction, $select2JsonOptions);
 			$select2JsonOptions = str_replace('"##PROCESSDATA##"', $processData, $select2JsonOptions);
 
 			echo '
