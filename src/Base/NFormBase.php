@@ -393,7 +393,7 @@ class NFormBase {
 			'additionalFldClasses' => array()
 		);
 
-		// regola generale - checkbox
+		// main rule - checkbox
 		// mostra l'asterisco se c'e' una sola checkbox e questa non ha un'etichetta
 		$primachiave = key($checkboxes);
 		if (!$options['radio'] && count($checkboxes) == 1 && is_null($checkboxes[$primachiave]['name'])
@@ -401,7 +401,7 @@ class NFormBase {
 			$outputArr['requiredLabel'] = '<font color="red">*</font> ';
 		}
 
-		// regola generale - radio
+		// main rule - radio
 		// mostra l'asterisco se c'e' la required nella prima chiave (se true, vale per tutte)
 		if ($options['radio'] && $checkboxes[$primachiave]['required']) {
 			$outputArr['requiredLabel'] = '<font color="red">*</font> ';
@@ -505,13 +505,13 @@ class NFormBase {
 			'tokenSeparators' => array(',')
 		);
 
-		// data
+		// parse data
 		$data = array(array());
 		if (!is_array($values)) {
 			echo '<b>Debug</b>: $values for the ' . $name . ' field is not an array, please check the select declaration.';
 		} elseif (isset($options['processData']) && !empty($values)) {
 			$data = $options['processData'].'({items: '.json_encode($values).'}).results';
-			$select2Options['data'] = '##DATA##';
+			$select2Options['data'] = '##DATA##';  // will be parsed as function
 		} elseif (isset($options['labelAsValue']) && $options['labelAsValue']) {
 			$refactored_values = array();
 			foreach ($values as $val => $lab) {
@@ -536,7 +536,12 @@ class NFormBase {
 			$select2Options['placeholder'] = __('universal_stylelib::stylelib.select');
 		}
 
-		// altre opzioni select2
+		// theme
+		if (isset($options['theme'])) {
+			$select2Options['theme'] = $options['theme'];
+		}
+
+		// look for other select2 options
 		StyleBaseClass::checkOption($options['custom'], false);
 		$select2Options['tags'] = $options['custom'];
 		StyleBaseClass::checkOption($options['clear'], false);
@@ -546,17 +551,16 @@ class NFormBase {
 		StyleBaseClass::checkOption($options['maxlength'], 1000);
 		$select2Options['maximumInputLength'] = $options['maxlength'];
 
-		if (isset($options['theme'])) {
-			$select2Options['theme'] = $options['theme'];
-		}
-
+		// init select2 ajax option
 		$processData = null;
 		$ajax_data = null;
 		$ajax_params_fields = null;
 		if (isset($options['ajax'])) {
+			// prepare ajax request parameters
 			$urlparams = array();
 			if (isset($options['paramAjax']) && is_array($options['paramAjax'])) {
 				foreach ($options['paramAjax'] as $key => $value) {
+					// check if value is a field ID ...
 					$value_is_field = false;
 					foreach ($formOptions['fields'] as $field) {
 						if ($value == $field['id']) {
@@ -566,22 +570,18 @@ class NFormBase {
 						}
 					}
 
+					// ... if yes, ajax parameter will be its content
 					if ($value_is_field) {
 						$urlparams[] = "$key: $('#$value').val()";
-					} else {
+					}
+					// ... otherwise, ajax parameter will be a constant
+					else {
 						$urlparams[] = "$key: ".urlencode($value);
 					}
 				}
 			}
-			$select2Options['ajax'] = array(
-				'url' => $options['ajax'],
-				'datatype' => 'json',
-				'data' => '##AJAXDATA##'
-			);
-			if (isset($options['processData'])) {
-				$processData = $options['processData'];
-				$select2Options['ajax']['processResults'] = '##PROCESSDATA##';
-			}
+
+			// finalize ajax request parameters
 			$ajax_data = 'function (term, page) {
 				return {
 					q: term.term,
@@ -589,18 +589,46 @@ class NFormBase {
 					'.implode(", ", $urlparams).'
 				};
 			}';
+
+			// process ajax response if needed
+			if (isset($options['processData'])) {
+				$processData = $options['processData'];
+				$select2Options['ajax']['processResults'] = '##PROCESSDATA##';  // will be parsed as function
+			}
+
+			// add ajax options to select2Options
+			$select2Options['ajax'] = array(
+				'url' => $options['ajax'],
+				'datatype' => 'json',
+				'data' => '##AJAXDATA##'
+			);
 		}
 
+		// init templateResult and templateSelection select2 options
 		$templateFunction = null;
-		if (isset($options['templateResult'])) {
-			$select2Options['templateResult'] = '##TPLFUNCTION##';
-			$select2Options['templateSelection'] = '##TPLFUNCTION##';
+		StyleBaseClass::checkOption($options['html'], false);
+		if (isset($options['templateResult']) || $options['html']) {
+			// add options to select2
+			$select2Options['templateResult'] = '##TPLFUNCTION##';  // will be parsed as function
+			$select2Options['templateSelection'] = '##TPLFUNCTION##';  // will be parsed as function
+			
+			// add 'result.' in templateResult if missing
+			if (isset($options['templateResult']) && substr($options['templateResult'], 0, 7) != 'result.') {
+				$options['templateResult'] = 'result.'.$options['templateResult'];
+			}
+
+			// prepare templateFunction function
 			if (isset($options['templateResultFunction'])) {
 				$templateFunction = $options['templateResult'];
+			} elseif ($options['html'] && isset($options['templateResult'])) {
+				$templateFunction = 'function (result) {
+					return result.text || $('.$options['templateResult'].');
+				}';
+			} elseif ($options['html']) {
+				$templateFunction = 'function (result) {
+					return $(result.text);
+				}';
 			} else {
-				if (substr($options['templateResult'], 0, 7) != 'result.') {
-					$options['templateResult'] = 'result.'.$options['templateResult'];
-				}
 				$templateFunction = 'function (result) {
 					return result.text || '.$options['templateResult'].';
 				}';
@@ -610,12 +638,15 @@ class NFormBase {
 		// output
 		if (!$options['noinit']) {
 			$select2JsonOptions = json_encode($select2Options);
+
+			// parse functions
 			if (!is_array($data)) {
 				$select2JsonOptions = str_replace('"##DATA##"', $data, $select2JsonOptions);
 			}
 			$select2JsonOptions = str_replace('"##AJAXDATA##"', $ajax_data, $select2JsonOptions);
 			$select2JsonOptions = str_replace('"##TPLFUNCTION##"', $templateFunction, $select2JsonOptions);
 			$select2JsonOptions = str_replace('"##PROCESSDATA##"', $processData, $select2JsonOptions);
+
 			echo '
 				<script type="text/javascript">
 					$(function() {
