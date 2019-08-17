@@ -217,14 +217,16 @@ class Table {
 				}
 				if (isset($header['sort'])) {
 					$qstring = array('sort='.$header['sort']);
-					if ($header['sort'] == $sort && $sort_dir != 'desc') {
+					if ($header['sort'] == $sort && $sort_dir == 'asc') {
 						$qstring[] = 'dir=desc';
+					} elseif ($header['sort'] == $sort && $sort_dir == 'desc') {
+						$qstring[] = 'dir=asc';
 					}
 					$headerOptions[] = 'onclick="document.location=\''.StyleLib::strip_query_param(array('sort', 'dir'), $qstring).'\'"';
 					
 					if ($header['sort'] == $sort && $sort_dir == 'desc')
 						$order_chevron = '<div class="float-right pull-right"><span class="fa fa-sort-down fa-sort-desc text-muted"></span></div>';
-					elseif ($header['sort'] == $sort)
+					elseif ($header['sort'] == $sort && $sort_dir == 'asc')
 						$order_chevron = '<div class="float-right pull-right"><span class="fa fa-sort-up fa-sort-asc text-muted"></span></div>';
 					else
 						$order_chevron = '<div class="float-right pull-right"><span class="fa fa-sort text-muted"></span></div>';
