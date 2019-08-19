@@ -96,75 +96,38 @@ class Table {
 
 		
 	static function paginazione($totalElements, $pagerSelected = null) {
-		echo '
-		<div class="tablePagination no-margin pull-right hidden-xs d-none d-sm-block">
-			<ul class="pagination pagination-sm" style="margin:0; font-size:14px">
-				';
-
-				$paginator = self::getPages($totalElements, $pagerSelected);
-				$pages_show = '';
-				
-				// VISUALIZZAZIONE DELLA SEQUENZA
-				if ($paginator['gotofirst']) {
-					$hellip = '';
-					if ($paginator['paginator_first'] > 2) {
-						$hellip = '&hellip;';
-					}
-					$pages_show .= '<li class="page-item"><a class="page-link" href="'.StyleBaseClass::strip_query_param('p', 'p=1').'">1'.$hellip.'</a></li>';
-				}
-				for ($page = $paginator['paginator_first']; $page <= $paginator['paginator_last']; $page++){
-					$active_class = '';
-					if ($paginator['active_page'] == $page) {
-						$active_class = ' active';
-					}
-					$pages_show .= "\n".'<li class="page-item'.$active_class.'">'
-						.'<a class="page-link" href="'.StyleBaseClass::strip_query_param('p', 'p='.$page).'">'
-						.$page.'</a></li>';
-				}
-				if ($paginator['gotolast']) {
-					$hellip = '';
-					if ($paginator['paginator_last'] < $paginator['num_pages'] - 1) {
-						$hellip = '&hellip;';
-					}
-					$pages_show .= '<li class="page-item"><a class="page-link" href="'.StyleBaseClass::strip_query_param('p', 'p='.$paginator['num_pages']).'">'
-						.$hellip.$paginator['num_pages'].'</a></li>';
-				}
-
-				if ($paginator['gotofirst'] || $paginator['gotolast']) {
-					$pages_show .= '<li class="page-item">
-						<div class="gotopage">
-							<form class="paginatorform">
-								<input type="number" class="form-control text-info"
-								title="'.__('universal_stylelib::stylelib.pager_tooltip_desktop').'" data-toggle="tooltip" data-placement="left" />
-							</form>
-						</div>
-					</li>';
-				}
-				
-				echo $pages_show;
-
-				echo '
-				
-			</ul>
-		</div>
-			
-		<div class="tablePagination pull-right visible-xs-block d-block d-sm-none">
-			<ul class="pagination">
-				<li class="page-item">
-					<div class="gotopage onlybox" style="padding:0;">
-						<form class="paginatorform">
-							<input type="number" class="form-control text-info"
-							placeholder="'.$paginator['active_page'].'/'.$paginator['num_pages'].'"
-							title="'.__('universal_stylelib::stylelib.pager_tooltip_mobile').'" data-toggle="tooltip" data-placement="left" />
-						</form>
-					</div>
-				</li>
-			</ul>
-		</div>';
+		$paginator = self::getPages($totalElements, $pagerSelected);
+		$pages_show = '';
+		
+		// VISUALIZZAZIONE DELLA SEQUENZA
+		if ($paginator['gotofirst']) {
+			$hellip = '';
+			if ($paginator['paginator_first'] > 2) {
+				$hellip = '&hellip;';
+			}
+			$pages_show .= get_called_class()::paginatorElement('1', '1'.$hellip, false);
+		}
+		for ($page = $paginator['paginator_first']; $page <= $paginator['paginator_last']; $page++){
+			$pages_show .= get_called_class()::paginatorElement($page, $page, $paginator['active_page'] == $page);
+		}
+		if ($paginator['gotolast']) {
+			$hellip = '';
+			if ($paginator['paginator_last'] < $paginator['num_pages'] - 1) {
+				$hellip = '&hellip;';
+			}
+			$pages_show .= get_called_class()::paginatorElement($paginator['num_pages'], $hellip.$paginator['num_pages'], false);
+		}
+		
+		if ($paginator['gotofirst'] || $paginator['gotolast']) {
+			$pages_show .= get_called_class()::paginatorGoToFormLarge();
+		}
+		
+		echo get_called_class()::paginatorContainer($pages_show);
+		echo get_called_class()::paginatorGoToFormSmall($paginator['active_page'], $paginator['num_pages']);
+		
 
 		// paginazione - select elementi per pagina
-		echo '<div class="pull-right hidden-xs d-none d-sm-block paginator-items-page">
-		'.__('universal_stylelib::stylelib.per_page').': <select class="pager" style="width:75px"></select></div>';
+		echo get_called_class()::paginatorPerPageSelector();
 		echo '<script>var itemsPage = '.$paginator['items_page'].';</script>';
 	}
 		
@@ -244,7 +207,7 @@ class Table {
 		
 		// aggiunge i filtri
 		if ($filters) {
-			echo '<tr>';
+			echo '<tr class="table-filters">';
 			
 			if (isset($options['selectAllCheck']) && $options['selectAllCheck']) {
 				echo '<td></td>';
@@ -263,10 +226,10 @@ class Table {
 				
 				
 				if (isset($header['filter']) && strlen($header['filter']) > 0) {
-					echo '<th '.implode(' ', $headerOptions).'><input type="text" class="form-control table-filter" '
+					echo '<td '.implode(' ', $headerOptions).'><input type="text" class="form-control table-filter" '
 						.'title="'.__('universal_stylelib::stylelib.filter_tooltip').'" data-toggle="tooltip" '
 						.'data-placement="bottom" onkeypress="if(event.keyCode == 13) tableFilterSearch(event, this);" '
-						.'data-sfilter="'.$header['filter'].'" '.$autofocus.' />';
+						.'data-sfilter="'.$header['filter'].'" '.$autofocus.' /></td>';
 					if (isset($_GET['f'.$header['filter']]) && strlen($_GET['f'.$header['filter']]) > 0) {
 						echo '<script type="text/javascript">$(function() {$("input[data-sfilter=\''.$header['filter'].'\']")'
 							.'.val(\''.StyleLib::jsReplace($_GET['f'.$header['filter']]).'\');});</script>';
@@ -282,14 +245,14 @@ class Table {
 						$daterange_filtered = __('universal_stylelib::stylelib.datefilter_notset');
 					}
 					
-					echo '<th '.implode(' ', $headerOptions).'><a href="javascript:;" class="form-control btn btn-sm btn-default" '
+					echo '<td '.implode(' ', $headerOptions).'><a href="javascript:;" class="form-control btn btn-sm btn-default" '
 						.'id="f'.$header['datefilter'].'" style="margin-bottom:0px;text-align:left"><span class="fa fa-calendar"></span> '
 						.'<i>'.$daterange_filtered.'</i></a>';
 					echo StyleBaseClass::getView('tableDatefilterJs', array('datefilter' => $header['datefilter']));
-					echo '</th>';
+					echo '</td>';
 
 				} else {
-					echo '<th '.implode(' ', $headerOptions).'></th>';
+					echo '<td '.implode(' ', $headerOptions).'></td>';
 				}
 			}
 			
