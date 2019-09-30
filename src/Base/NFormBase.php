@@ -91,8 +91,6 @@ class NFormBase {
 			$attr[] = 'data-rule-min="' . $options['min'] . '"';
 		if (isset($options['max']) && $options['max'])
 			$attr[] = 'data-rule-max="' . $options['max'] . '"';
-		if (isset($options['minlength']) && $options['minlength'])
-			$attr[] = 'data-rule-minlength="' . $options['minlength'] . '"';
 		if (isset($options['maxlength']) && $options['maxlength'])
 			$attr[] = 'data-rule-maxlength="' . $options['maxlength'] . '"';
 		if (isset($options['length']) && $options['length'])
@@ -543,6 +541,11 @@ class NFormBase {
 		if (isset($options['theme'])) {
 			$select2Options['theme'] = $options['theme'];
 		}
+		$matcherFunction = '';
+		if (isset($options['matcher'])) {
+			$select2Options['matcher'] = '##MATCHERFUNCTION##';
+			$matcherFunction = $options['matcher'];
+		}
 
 		// look for other select2 options
 		StyleBaseClass::checkOption($options['custom'], false);
@@ -632,7 +635,6 @@ class NFormBase {
 				$templateResultFunction = $options['templateResult'];
 			} elseif ($options['html']) {
 				$templateResultFunction = 'function (result) {
-					console.log(result);
 					if ('.$options['templateResult'].' == undefined) {
 						return $("<span>").text(result.text);
 					} else {
@@ -686,6 +688,7 @@ class NFormBase {
 			$select2JsonOptions = str_replace('"##TPLRESULTFUNCTION##"', $templateResultFunction, $select2JsonOptions);
 			$select2JsonOptions = str_replace('"##TPLSELECTIONFUNCTION##"', $templateSelectionFunction, $select2JsonOptions);
 			$select2JsonOptions = str_replace('"##PROCESSDATA##"', $processData, $select2JsonOptions);
+			$select2JsonOptions = str_replace('"##MATCHERFUNCTION##"', $matcherFunction, $select2JsonOptions);
 
 			echo '
 				<script type="text/javascript">

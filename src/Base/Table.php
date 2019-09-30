@@ -225,7 +225,115 @@ class Table {
 				}
 				
 				
-				if (isset($header['filter']) && strlen($header['filter']) > 0) {
+				if (isset($header['filter']) && strlen($header['filter']) > 0 && isset($header['selectfilter']) && is_array($header['selectfilter'])) {
+					
+
+
+
+
+
+
+
+						config(['app.debug' => true]);
+
+
+					// INITIALIZE
+					// base options
+					$select_id = 'select'.rand(100000,999999);
+
+					// SELECT2 INIT
+					$select2Options = array(
+						'tokenSeparators' => array(',')
+					);
+
+					// parse data
+					$data = array(array());
+					if (!is_array($header['selectfilter'])) {
+						echo '<b>Debug</b>: selectfilter option for the ' . $header['filter'] . ' filter is not an array, please check its declaration.';
+					} else {
+						foreach ($header['selectfilter'] as $val => $lab) {
+							$data[] = array('id' => strval($val), 'text' => $lab);
+						}
+						$select2Options['data'] = $data;
+					}
+
+					// theme
+					$select2Options['theme'] = 'bootstrap4';
+
+					// look for other select2 options
+					$select2Options['tags'] = true;
+					$select2Options['allowClear'] = true;
+					$select2Options['placeholder'] = 'Select to filter';
+
+					// output
+					$select2JsonOptions = json_encode($select2Options);
+
+					echo '<td '.implode(' ', $headerOptions).'><select type="text" class="form-control table-filter" '
+						.'title="'.__('universal_stylelib::stylelib.filter_tooltip').'" data-toggle="tooltip" '
+						.'data-placement="bottom" onkeypress="if(event.keyCode == 13) tableFilterSearch(event, this);" '
+						.'data-sfilter="'.$header['filter'].'" '.$autofocus.' id="'.$select_id.'">';
+
+						echo '</select></td>';
+						echo '
+						<script type="text/javascript">
+							$(function() {
+								select2' . preg_replace("/[^A-Za-z0-9]/", "", $select_id) . ' = $("#' . $select_id . '").select2('.$select2JsonOptions.');
+							});
+						</script>' . "\n\n";
+				
+					// VALUE
+/* 					if (isset($options['value']) && !is_array($options['value'])) {
+						$options['value'] = array($options['value']);
+					}
+				if (isset($options['value']) && is_array($options['value']) && count($options['value']) > 0) {
+						echo '<script type="text/javascript">' . "\n";
+						echo '$(function() {' . "\n";
+						if (is_array($data)) {
+							foreach ($options['value'] as $val) {
+								$exists = false;
+								foreach ($data as $d) {
+									if (isset($d['id']) && $d['id'] == $val) {
+										$exists = true;
+									}
+								}
+								if (!$exists) {
+									echo 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $select_id) . '.select2().append("<option value=\"' . StyleBaseClass::jsReplace($val) . '\">' . StyleBaseClass::jsReplace($val) . '</option>");' . "\n";
+								}
+							}
+						}
+						if (!empty($options['value'][0]) && is_array($options['value'][0])) {
+							// TODO: manca supporto a prepopolamento multiplo delle select ajax
+							echo 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $select_id) . '.val("' . StyleBaseClass::jsReplace($options['value'][0][$options['_key_values']]) . '").trigger("change");' . "\n";
+						} else {
+							echo 'select2' . preg_replace("/[^A-Za-z0-9]/", "", $select_id) . '.val(["' . StyleBaseClass::jsReplace(implode('","', $options['value'])) . '"]).trigger("change");' . "\n";
+						}
+						echo '});</script>';
+					}
+ */	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					if (isset($_GET['f'.$header['filter']]) && strlen($_GET['f'.$header['filter']]) > 0) {
+						echo '<script type="text/javascript">$(function() {$("input[data-sfilter=\''.$header['filter'].'\']")'
+							.'.val(\''.StyleLib::jsReplace($_GET['f'.$header['filter']]).'\');});</script>';
+					}
+				} elseif (isset($header['filter']) && strlen($header['filter']) > 0) {
 					echo '<td '.implode(' ', $headerOptions).'><input type="text" class="form-control table-filter" '
 						.'title="'.__('universal_stylelib::stylelib.filter_tooltip').'" data-toggle="tooltip" '
 						.'data-placement="bottom" onkeypress="if(event.keyCode == 13) tableFilterSearch(event, this);" '
