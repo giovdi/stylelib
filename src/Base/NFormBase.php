@@ -394,7 +394,7 @@ class NFormBase {
 		// main rule - checkbox
 		// mostra l'asterisco se c'e' una sola checkbox e questa non ha un'etichetta
 		$primachiave = key($checkboxes);
-		if (!$options['radio'] && count($checkboxes) == 1 && is_null($checkboxes[$primachiave]['name'])
+		if (!$options['radio'] && count($checkboxes) == 1 && (!isset($checkboxes[$primachiave]['name']) || is_null($checkboxes[$primachiave]['name']))
 		&& isset($checkboxes[$primachiave]['required']) && $checkboxes[$primachiave]['required']) {
 			$outputArr['requiredLabel'] = '<font color="red">*</font> ';
 		}
@@ -418,6 +418,7 @@ class NFormBase {
 			}
 			StyleBaseClass::checkOption($c['required'], false);
 			StyleBaseClass::checkOption($c['disabled'], false);
+			StyleBaseClass::checkOption($c['label'], '');
 
 			// checkbox name
 			StyleBaseClass::checkOption($c['name'], null);
