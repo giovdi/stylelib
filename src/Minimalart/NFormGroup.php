@@ -105,7 +105,16 @@ class NFormGroup extends \DeployStudio\Style\Base\NFormGroup {
 	}
 
 	static function radioBuild ($chkname, $chkid, $c) {
-		return '';
+		return '<div>
+		<input type="radio" name="' . $chkname . '" id="' . $chkid . '" 
+			' . (!empty($c['value']) ? 'value="'.$c['value'].'"' : '') . ' 
+			' . ($c['required'] ? 'data-rule-required="true"' : '') . ' 
+			' . ($c['disabled'] ? 'disabled' : '') . '
+			>
+			<label for="' . $chkid . '">' . $c['label'].'</label>'
+							. (strlen($c['label']) > 0 && $c['required'] ? ' <font color="red">*</font>' : '') . '
+		</div>
+		';
 	}
 
 	static function select($col, $label, $name, $values, $required = false, $options = array()) {
