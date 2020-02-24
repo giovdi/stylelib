@@ -424,6 +424,9 @@ class Table {
 				if (isset($rowValue['colspan'])) {
 					$options[] = 'colspan="'.($rowValue['colspan'] == self::$MAX ? count($headers) : $rowValue['colspan']).'"';
 				}
+				if (isset($rowValue['style'])) {
+					$options[] = 'style="'.$rowValue['style'].'"';
+				}
 				if (isset($rowValue['class'])) {
 					$options[] = 'class="'.$rowValue['class'].'"';
 				}
@@ -476,6 +479,9 @@ class Table {
 			
 				if (isset($rowValue['colspan'])) {
 					$options[] = 'colspan="'.($rowValue['colspan'] == self::$MAX ? count($headers) : $rowValue['colspan']).'"';
+				}
+				if (isset($rowValue['style'])) {
+					$options[] = 'style="'.$rowValue['style'].'"';
 				}
 				if (isset($rowValue['class'])) {
 					$options[] = 'class="'.$rowValue['class'].'"';
