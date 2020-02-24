@@ -986,7 +986,7 @@ class NFormBase {
 			<button class="btn btn-' . $save_btn_class . ' disabled" type="submit">
 				<i class="' . $save_icon . '"></i> ' . $save_label . '
 			</button>
-			' . ($cancel_btn ? '<a class="btn btn-white" href="javascript:window.history.back()">' . 'Annulla' . '</a>' : '') . '
+			' . ($cancel_btn ? '<a class="btn btn-white" href="javascript:window.history.back()">' . __('universal_stylelib::stylelib.cancel') . '</a>' : '') . '
 			' . $other_actions_str.'
 			<script>$(function() {$(\'#'.self::$openForm.' button[type=submit]\').removeClass(\'disabled\')})</script>';
 	}

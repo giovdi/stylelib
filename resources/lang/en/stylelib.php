@@ -1,6 +1,7 @@
 <?php
 return [
 	'save' => 'Save',
+	'cancel' => 'Cancel',
 	'ajax_warning' => 'Warning',
 	'ajax_message' => 'The server returned the following message.<br>
 		Please ask the dev staff for more informations. Thank you.<br>
