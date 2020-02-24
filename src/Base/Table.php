@@ -97,38 +97,7 @@ class Table {
 		
 	static function paginazione($totalElements, $pagerSelected = null) {
 		$paginator = self::getPages($totalElements, $pagerSelected);
-		$pages_show = '';
-		
-		// VISUALIZZAZIONE DELLA SEQUENZA
-		if ($paginator['gotofirst']) {
-			$hellip = '';
-			if ($paginator['paginator_first'] > 2) {
-				$hellip = '&hellip;';
-			}
-			$pages_show .= get_called_class()::paginatorElement('1', '1'.$hellip, false);
-		}
-		for ($page = $paginator['paginator_first']; $page <= $paginator['paginator_last']; $page++){
-			$pages_show .= get_called_class()::paginatorElement($page, $page, $paginator['active_page'] == $page);
-		}
-		if ($paginator['gotolast']) {
-			$hellip = '';
-			if ($paginator['paginator_last'] < $paginator['num_pages'] - 1) {
-				$hellip = '&hellip;';
-			}
-			$pages_show .= get_called_class()::paginatorElement($paginator['num_pages'], $hellip.$paginator['num_pages'], false);
-		}
-		
-		if ($paginator['gotofirst'] || $paginator['gotolast']) {
-			$pages_show .= get_called_class()::paginatorGoToFormLarge();
-		}
-		
-		echo get_called_class()::paginatorContainer($pages_show);
-		echo get_called_class()::paginatorGoToFormSmall($paginator['active_page'], $paginator['num_pages']);
-		
-
-		// paginazione - select elementi per pagina
-		echo get_called_class()::paginatorPerPageSelector();
-		echo '<script>var itemsPage = '.$paginator['items_page'].';</script>';
+		echo get_called_class()::getPaginator($paginator);
 	}
 		
 	static function openTable($headers, $options) {
