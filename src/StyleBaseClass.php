@@ -1,7 +1,7 @@
 <?php
 namespace DeployStudio\Style;
 
-use \Philo\Blade\Blade;
+use \Jenssegers\Blade\Blade;
 
 class StyleBaseClass {
 	protected static $blade_views = __DIR__ . '/../views';
@@ -79,6 +79,6 @@ class StyleBaseClass {
 		}
 
 		$blade = new Blade(self::$blade_views, self::$blade_cache);
-		return $blade->view()->make($tema.'.'.$template, $params)->render();
+		return $blade->make($tema.'.'.$template, $params)->render();
 	}
 }

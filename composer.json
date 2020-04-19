@@ -1,7 +1,7 @@
 {
 	"name": "deploystudio/universal-stylelib",
 	"description": "Deploy Studio Universal Style Library",
-	"version": "0.0.23",
+	"version": "0.0.24",
 	"autoload": {
 		"psr-4": {
 			"DeployStudio\\Style\\": "src"
@@ -9,7 +9,7 @@
 	},
 	"require": {
 		"php": ">=5.2",
-		"philo/laravel-blade": "3.*"
+		"jenssegers/blade": "1.*"
 	},
 	"extra": {
 		"laravel": {
