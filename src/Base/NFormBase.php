@@ -498,11 +498,11 @@ class NFormBase {
 		if ($required) {
 			$outputArr['requiredLabel'] = '<font color="red">*</font> ';
 		}
-
+			
 		// SELECT2 INIT
-		$select2Options = array(
-			'tokenSeparators' => array(',')
-		);
+		$select2Options = array();
+		StyleBaseClass::checkOption($options['tokenSeparator'], ',');
+		$select2Options['tokenSeparators'] = array($options['tokenSeparator']);
 
 		// parse data
 		StyleBaseClass::checkOption($options['dataProcessed'], false);
