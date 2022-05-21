@@ -7,11 +7,11 @@ use \DeployStudio\Style\StyleBaseClass;
 class NFormGroup extends NFormBase {
 
 	static function rowFirst() {
-		StyleBaseClass::divOpen('form-row');
+		StyleBaseClass::divOpen('form-row row');
 	}
 	static function rowBreak() {
 		StyleBaseClass::divClose();
-		StyleBaseClass::divOpen('form-row');
+		StyleBaseClass::divOpen('form-row row');
 	}
 	static function rowLast() {
 		StyleBaseClass::divClose();
