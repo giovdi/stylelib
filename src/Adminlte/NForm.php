@@ -2,6 +2,7 @@
 namespace DeployStudio\Style\Adminlte;
 
 use DeployStudio\Style\StyleBaseClass;
+use DeployStudio\Style\Base\NFormBase;
 
 
 class NForm extends \DeployStudio\Style\Base\NForm {
