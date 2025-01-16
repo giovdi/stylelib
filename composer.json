@@ -1,10 +1,10 @@
 {
-	"name": "deploystudio/universal-stylelib",
-	"description": "Deploy Studio Universal Style Library",
-	"version": "0.0.28",
+	"name": "pixelstyle/stylelib",
+	"description": "Pixelstyle Universal Style Library",
+	"version": "1.0.0",
 	"autoload": {
 		"psr-4": {
-			"DeployStudio\\Style\\": "src"
+			"Pixelstyle\\Stylelib\\": "src"
 		}
 	},
 	"require": {
@@ -13,7 +13,7 @@
 	"extra": {
 		"laravel": {
 			"providers": [
-				"DeployStudio\\Style\\Providers\\PackageServiceProvider"
+				"Pixelstyle\\Stylelib\\StyleServiceProvider"
 			]
 		}
 	}
